@@ -1,5 +1,7 @@
 package com.biolab.stockservice.config;
 
+import java.util.stream.Stream;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
 import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
@@ -8,6 +10,17 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
+
+    private final String[] allowedOrigins;
+
+    public WebConfig(@Value("${CORS_ALLOWED_ORIGINS:}") String productionOrigins) {
+        allowedOrigins = Stream.concat(
+                        Stream.of("http://localhost:5173", "http://127.0.0.1:5173",
+                                "http://localhost:4173", "http://127.0.0.1:4173"),
+                        Stream.of(productionOrigins.split(",")).map(String::trim)
+                                .filter(origin -> !origin.isEmpty()))
+                .distinct().toArray(String[]::new);
+    }
 
     @Override
     public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
@@ -18,12 +31,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins(
-                        "http://localhost:5173",
-                        "http://127.0.0.1:5173",
-                        "http://localhost:4173",
-                        "http://127.0.0.1:4173"
-                )
+                .allowedOrigins(allowedOrigins)
                 .allowedMethods("GET", "POST", "OPTIONS")
                 .allowedHeaders("*")
                 .exposedHeaders("Content-Type", "Vary");
