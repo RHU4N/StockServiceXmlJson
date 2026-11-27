@@ -9,6 +9,7 @@ import tools.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import java.math.BigDecimal;
 
 // Define o elemento raiz <produto> quando serializado em XML
+// APRESENTACAO 04 — Mesmo modelo Java para JSON e XML; a anotacao define a raiz XML.
 @JacksonXmlRootElement(localName = "produto")
 public class Produto {
 

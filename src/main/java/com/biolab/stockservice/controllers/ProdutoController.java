@@ -25,6 +25,8 @@ public class ProdutoController {
         this.produtoService = produtoService;
     }
 
+    // APRESENTACAO 01 — GET /produtos: produces anuncia JSON e XML; Accept seleciona o formato.
+    // O Spring/Jackson serializa o mesmo objeto Java e Vary: Accept identifica a variacao da resposta.
     @GetMapping(produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
     public ResponseEntity<ProdutosResponse> listarProdutos() {
         ProdutosResponse resposta = new ProdutosResponse(produtoService.listarTodos());
@@ -33,6 +35,7 @@ public class ProdutoController {
                 .body(resposta);
     }
 
+    // APRESENTACAO 02 — GET /produtos/{id}: identificacao do recurso pela URL; retorna 200 ou 404.
     @GetMapping(value = "/{id}", produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
     public ResponseEntity<Produto> buscarPorId(@PathVariable Long id) {
         return produtoService.buscarPorId(id)
@@ -44,6 +47,8 @@ public class ProdutoController {
                         .build());
     }
 
+    // APRESENTACAO 03 — POST: consumes define os formatos recebidos; @RequestBody desserializa.
+    // @Valid valida o objeto Java; produces/Accept definem a resposta, com HTTP 201.
     @PostMapping(
             consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE },
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }

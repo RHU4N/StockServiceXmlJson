@@ -22,6 +22,7 @@ public class WebConfig implements WebMvcConfigurer {
                 .distinct().toArray(String[]::new);
     }
 
+    // APRESENTACAO 06 (extra) — JSON e o formato padrao quando nao ha preferencia especifica.
     @Override
     public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
         // Retorna JSON por padrão quando o cliente não enviar Accept específico
