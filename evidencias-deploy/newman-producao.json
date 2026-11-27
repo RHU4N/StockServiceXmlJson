@@ -1,0 +1,4563 @@
+{
+  "collection": {
+    "_": {
+      "postman_id": "a01c4467-c25a-49ce-83f9-1583edb30a5f"
+    },
+    "item": [
+      {
+        "id": "7a2d84ac-9ea5-4500-912f-1f36ae026fea",
+        "name": "01 - Listar produtos | JSON",
+        "request": {
+          "description": {
+            "content": "Lista em JSON. A raiz contém a propriedade produtos.",
+            "type": "text/plain"
+          },
+          "url": {
+            "path": [
+              "produtos"
+            ],
+            "host": [
+              "{{baseUrl}}"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Accept",
+              "value": "application/json"
+            }
+          ],
+          "method": "GET"
+        },
+        "response": [],
+        "event": [
+          {
+            "listen": "test",
+            "script": {
+              "id": "92c2bd0f-3ee4-41ad-8177-7d62fb48392c",
+              "type": "text/javascript",
+              "exec": [
+                "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                "pm.test(\"Content-Type: application/json\", () => pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"));",
+                "pm.test(\"Vary: Accept\", () => pm.expect(pm.response.headers.get(\"Vary\") || \"\").to.match(/\\bAccept\\b/i));",
+                "pm.test(\"Coleção de produtos\", () => pm.expect(pm.response.json().produtos).to.be.an(\"array\").with.lengthOf.at.least(5));"
+              ],
+              "_lastExecutionId": "f90ef1ec-e79e-4131-bb19-c358d5a2cd58"
+            }
+          }
+        ]
+      },
+      {
+        "id": "a7e00caa-b6c2-4196-ba7a-5c099c76cabc",
+        "name": "02 - Listar produtos | XML",
+        "request": {
+          "description": {
+            "content": "Mesma URL e método, alterando somente Accept. Raiz produtos e elementos produto.",
+            "type": "text/plain"
+          },
+          "url": {
+            "path": [
+              "produtos"
+            ],
+            "host": [
+              "{{baseUrl}}"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Accept",
+              "value": "application/xml"
+            }
+          ],
+          "method": "GET"
+        },
+        "response": [],
+        "event": [
+          {
+            "listen": "test",
+            "script": {
+              "id": "7529c556-5cb1-4bc4-8538-8a77f36231c7",
+              "type": "text/javascript",
+              "exec": [
+                "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                "pm.test(\"Content-Type: application/xml\", () => pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/xml\"));",
+                "pm.test(\"Vary: Accept\", () => pm.expect(pm.response.headers.get(\"Vary\") || \"\").to.match(/\\bAccept\\b/i));",
+                "pm.test(\"Coleção XML\", () => { const p = xml2Json(pm.response.text()).produtos.produto; pm.expect(p).to.be.an(\"array\").with.lengthOf.at.least(5); });"
+              ],
+              "_lastExecutionId": "603bd440-615e-43ce-9183-bc3d2e8ed30b"
+            }
+          }
+        ]
+      },
+      {
+        "id": "7698925c-4f5c-49b6-938a-5d74c224ca39",
+        "name": "03 - Consultar Notebook | JSON",
+        "request": {
+          "description": {
+            "content": "Salva dados e tamanho para comparação com a próxima requisição.",
+            "type": "text/plain"
+          },
+          "url": {
+            "path": [
+              "produtos",
+              "1"
+            ],
+            "host": [
+              "{{baseUrl}}"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Accept",
+              "value": "application/json"
+            }
+          ],
+          "method": "GET"
+        },
+        "response": [],
+        "event": [
+          {
+            "listen": "test",
+            "script": {
+              "id": "39434496-dd9c-44d1-a06b-b350f69cb71d",
+              "type": "text/javascript",
+              "exec": [
+                "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                "pm.test(\"Content-Type: application/json\", () => pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"));",
+                "pm.test(\"Vary: Accept\", () => pm.expect(pm.response.headers.get(\"Vary\") || \"\").to.match(/\\bAccept\\b/i));",
+                "pm.test(\"Dados do Notebook\", () => { const p = pm.response.json(); pm.expect(p.id).to.eql(1); pm.expect(p.nome).to.eql(\"Notebook\"); pm.expect(p.preco).to.eql(2500); pm.expect(p.estoque).to.eql(12); });",
+                "if (pm.response.code === 200) { const p = pm.response.json(); pm.collectionVariables.set(\"produtoJson\", JSON.stringify({id:p.id,nome:p.nome,preco:p.preco,estoque:p.estoque})); pm.collectionVariables.set(\"jsonBytes\", unescape(encodeURIComponent(pm.response.text())).length.toString()); }"
+              ],
+              "_lastExecutionId": "47ae46bd-3712-4e4a-ad21-0361c747673b"
+            }
+          }
+        ]
+      },
+      {
+        "id": "8d6878e9-1b21-4da2-b052-3455e1c40819",
+        "name": "04 - Consultar Notebook | XML e comparar",
+        "request": {
+          "description": {
+            "content": "Execute após 03 para comparar os valores e o tamanho UTF-8 do corpo textual. Veja Test Results e Postman Console.",
+            "type": "text/plain"
+          },
+          "url": {
+            "path": [
+              "produtos",
+              "1"
+            ],
+            "host": [
+              "{{baseUrl}}"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Accept",
+              "value": "application/xml"
+            }
+          ],
+          "method": "GET"
+        },
+        "response": [],
+        "event": [
+          {
+            "listen": "test",
+            "script": {
+              "id": "653274a1-e8b8-4e65-95f6-177464eadece",
+              "type": "text/javascript",
+              "exec": [
+                "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                "pm.test(\"Content-Type: application/xml\", () => pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/xml\"));",
+                "pm.test(\"Vary: Accept\", () => pm.expect(pm.response.headers.get(\"Vary\") || \"\").to.match(/\\bAccept\\b/i));",
+                "pm.test(\"Dados do Notebook\", () => { const p = xml2Json(pm.response.text()).produto; pm.expect(Number(p.id)).to.eql(1); pm.expect(p.nome).to.eql(\"Notebook\"); pm.expect(Number(p.preco)).to.eql(2500); pm.expect(Number(p.estoque)).to.eql(12); });",
+                "pm.test(\"Equivalência com JSON da requisição 03\", () => { const anterior = pm.collectionVariables.get(\"produtoJson\"); pm.expect(anterior, \"Execute a requisição 03 antes\").to.be.ok; const p = xml2Json(pm.response.text()).produto; pm.expect({id:Number(p.id),nome:p.nome,preco:Number(p.preco),estoque:Number(p.estoque)}).to.deep.eql(JSON.parse(anterior)); });",
+                "console.log(\"JSON (bytes UTF-8):\", pm.collectionVariables.get(\"jsonBytes\"), \"XML (bytes UTF-8):\", unescape(encodeURIComponent(pm.response.text())).length);"
+              ],
+              "_lastExecutionId": "dcb2f2a0-aea5-4a40-bab2-7a3c396cf757"
+            }
+          }
+        ]
+      },
+      {
+        "id": "9ce474e7-45e1-4756-94d5-8096c6ec0d26",
+        "name": "05 - JSON por padrão",
+        "request": {
+          "description": {
+            "content": "Accept genérico: o servidor seleciona JSON como padrão.",
+            "type": "text/plain"
+          },
+          "url": {
+            "path": [
+              "produtos",
+              "1"
+            ],
+            "host": [
+              "{{baseUrl}}"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Accept",
+              "value": "*/*"
+            }
+          ],
+          "method": "GET"
+        },
+        "response": [],
+        "event": [
+          {
+            "listen": "test",
+            "script": {
+              "id": "e996fb04-30d4-4885-93a1-cb788fbfef87",
+              "type": "text/javascript",
+              "exec": [
+                "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                "pm.test(\"Content-Type: application/json\", () => pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"));",
+                "pm.test(\"Vary: Accept\", () => pm.expect(pm.response.headers.get(\"Vary\") || \"\").to.match(/\\bAccept\\b/i));",
+                "pm.test(\"Dados do Notebook\", () => { const p = pm.response.json(); pm.expect(p.id).to.eql(1); pm.expect(p.nome).to.eql(\"Notebook\"); pm.expect(p.preco).to.eql(2500); pm.expect(p.estoque).to.eql(12); });"
+              ],
+              "_lastExecutionId": "dbf4092f-3873-468e-82e7-d4139e63ee41"
+            }
+          }
+        ]
+      },
+      {
+        "id": "686ae1fb-383f-44f1-bd51-60a7d0fb4815",
+        "name": "06 - Cadastrar produto | JSON",
+        "request": {
+          "description": {
+            "content": "Demonstra desserialização JSON no Java. Adiciona produto em memória.",
+            "type": "text/plain"
+          },
+          "url": {
+            "path": [
+              "produtos"
+            ],
+            "host": [
+              "{{baseUrl}}"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Accept",
+              "value": "application/json"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "method": "POST",
+          "body": {
+            "mode": "raw",
+            "raw": "{\n  \"nome\": \"Webcam HD\",\n  \"preco\": 249.9,\n  \"estoque\": 10\n}",
+            "options": {
+              "raw": {
+                "language": "json"
+              }
+            }
+          }
+        },
+        "response": [],
+        "event": [
+          {
+            "listen": "test",
+            "script": {
+              "id": "42c4cfdb-794a-477b-9717-5625af65260e",
+              "type": "text/javascript",
+              "exec": [
+                "pm.test(\"HTTP 201\", () => pm.response.to.have.status(201));",
+                "pm.test(\"Content-Type: application/json\", () => pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"));",
+                "pm.test(\"Vary: Accept\", () => pm.expect(pm.response.headers.get(\"Vary\") || \"\").to.match(/\\bAccept\\b/i));",
+                "pm.test(\"Produto cadastrado\", () => { const p = pm.response.json(); pm.expect(p.id).to.be.a(\"number\"); pm.expect(p.nome).to.eql(\"Webcam HD\"); pm.expect(p.preco).to.eql(249.9); pm.expect(p.estoque).to.eql(10); });",
+                "if(pm.response.code===201) pm.collectionVariables.set(\"idCriadoJson\",String(pm.response.json().id));"
+              ],
+              "_lastExecutionId": "b162720e-3db0-4c91-ac4a-bb57490ccac4"
+            }
+          }
+        ]
+      },
+      {
+        "id": "fc56b647-ade4-4542-bf9a-2b9760c18c1a",
+        "name": "07 - Cadastrar produto | XML",
+        "request": {
+          "description": {
+            "content": "Demonstra desserialização XML no Java.",
+            "type": "text/plain"
+          },
+          "url": {
+            "path": [
+              "produtos"
+            ],
+            "host": [
+              "{{baseUrl}}"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Accept",
+              "value": "application/xml"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/xml"
+            }
+          ],
+          "method": "POST",
+          "body": {
+            "mode": "raw",
+            "raw": "<produto>\n  <nome>Mousepad Gamer</nome>\n  <preco>79.90</preco>\n  <estoque>25</estoque>\n</produto>",
+            "options": {
+              "raw": {
+                "language": "xml"
+              }
+            }
+          }
+        },
+        "response": [],
+        "event": [
+          {
+            "listen": "test",
+            "script": {
+              "id": "c8bb4811-d4b1-4644-a6f2-0189c86da52b",
+              "type": "text/javascript",
+              "exec": [
+                "pm.test(\"HTTP 201\", () => pm.response.to.have.status(201));",
+                "pm.test(\"Content-Type: application/xml\", () => pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/xml\"));",
+                "pm.test(\"Vary: Accept\", () => pm.expect(pm.response.headers.get(\"Vary\") || \"\").to.match(/\\bAccept\\b/i));",
+                "pm.test(\"Produto cadastrado\", () => { const p = xml2Json(pm.response.text()).produto; pm.expect(Number(p.id)).to.be.above(5); pm.expect(p.nome).to.eql(\"Mousepad Gamer\"); pm.expect(Number(p.preco)).to.eql(79.9); pm.expect(Number(p.estoque)).to.eql(25); });"
+              ],
+              "_lastExecutionId": "78b7c0f6-9e65-444e-a492-ee8f0b80f295"
+            }
+          }
+        ]
+      },
+      {
+        "id": "87e390e8-f2f3-4011-b668-b0fe8defc554",
+        "name": "08 - Consultar cadastro JSON em XML",
+        "request": {
+          "description": {
+            "content": "Execute após 06. O produto criado por JSON pode ser consultado em XML.",
+            "type": "text/plain"
+          },
+          "url": {
+            "path": [
+              "produtos",
+              "{{idCriadoJson}}"
+            ],
+            "host": [
+              "{{baseUrl}}"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Accept",
+              "value": "application/xml"
+            }
+          ],
+          "method": "GET"
+        },
+        "response": [],
+        "event": [
+          {
+            "listen": "test",
+            "script": {
+              "id": "d09d4286-d1f1-41a9-8b79-722f777734f9",
+              "type": "text/javascript",
+              "exec": [
+                "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                "pm.test(\"Content-Type: application/xml\", () => pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/xml\"));",
+                "pm.test(\"Vary: Accept\", () => pm.expect(pm.response.headers.get(\"Vary\") || \"\").to.match(/\\bAccept\\b/i));",
+                "pm.test(\"Mesmo produto criado por JSON\", () => { const p = xml2Json(pm.response.text()).produto; pm.expect(Number(p.id)).to.eql(Number(pm.collectionVariables.get(\"idCriadoJson\"))); pm.expect(p.nome).to.eql(\"Webcam HD\"); pm.expect(Number(p.preco)).to.eql(249.9); pm.expect(Number(p.estoque)).to.eql(10); });"
+              ],
+              "_lastExecutionId": "7292071e-8fed-4838-8dd8-6963561e60ec"
+            }
+          }
+        ]
+      },
+      {
+        "id": "3c58af8a-89d5-4d89-8f9b-d474355060da",
+        "name": "09 - Produto inexistente | 404",
+        "request": {
+          "description": {
+            "content": "Recurso inexistente.",
+            "type": "text/plain"
+          },
+          "url": {
+            "path": [
+              "produtos",
+              "999999"
+            ],
+            "host": [
+              "{{baseUrl}}"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Accept",
+              "value": "application/json"
+            }
+          ],
+          "method": "GET"
+        },
+        "response": [],
+        "event": [
+          {
+            "listen": "test",
+            "script": {
+              "id": "711815e1-fda9-40d9-9a9d-25d2d03b9e85",
+              "type": "text/javascript",
+              "exec": [
+                "pm.test(\"HTTP 404\", () => pm.response.to.have.status(404));"
+              ],
+              "_lastExecutionId": "0b3b1212-6470-431d-9a9a-7199287e2c2c"
+            }
+          }
+        ]
+      },
+      {
+        "id": "d000f62c-0690-4833-8183-7228aa6a4878",
+        "name": "10 - Accept não suportado | 406",
+        "request": {
+          "description": {
+            "content": "O servidor não oferece a representação solicitada.",
+            "type": "text/plain"
+          },
+          "url": {
+            "path": [
+              "produtos"
+            ],
+            "host": [
+              "{{baseUrl}}"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Accept",
+              "value": "text/plain"
+            }
+          ],
+          "method": "GET"
+        },
+        "response": [],
+        "event": [
+          {
+            "listen": "test",
+            "script": {
+              "id": "abb22328-8f8c-4b34-9117-c37021d40c93",
+              "type": "text/javascript",
+              "exec": [
+                "pm.test(\"HTTP 406\", () => pm.response.to.have.status(406));"
+              ],
+              "_lastExecutionId": "f0086065-087c-43d6-880a-25c6ff69af44"
+            }
+          }
+        ]
+      },
+      {
+        "id": "821b8369-d807-4f78-8400-6291806716c3",
+        "name": "11 - Content-Type não suportado | 415",
+        "request": {
+          "description": {
+            "content": "O formato enviado não é aceito pelo endpoint.",
+            "type": "text/plain"
+          },
+          "url": {
+            "path": [
+              "produtos"
+            ],
+            "host": [
+              "{{baseUrl}}"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Accept",
+              "value": "application/json"
+            },
+            {
+              "key": "Content-Type",
+              "value": "text/plain"
+            }
+          ],
+          "method": "POST",
+          "body": {
+            "mode": "raw",
+            "raw": "nome=Teste",
+            "options": {
+              "raw": {
+                "language": "text"
+              }
+            }
+          }
+        },
+        "response": [],
+        "event": [
+          {
+            "listen": "test",
+            "script": {
+              "id": "1b72aae1-1684-47ca-a85b-107ea53b05e5",
+              "type": "text/javascript",
+              "exec": [
+                "pm.test(\"HTTP 415\", () => pm.response.to.have.status(415));"
+              ],
+              "_lastExecutionId": "f67c5c2a-d2ed-4969-9d3f-509af85bc12c"
+            }
+          }
+        ]
+      },
+      {
+        "id": "ee3e4bb3-1528-4beb-86b6-9eebb815eaa4",
+        "name": "12 - Dados inválidos | 400",
+        "request": {
+          "description": {
+            "content": "Bean Validation rejeita nome vazio, preço e estoque negativos.",
+            "type": "text/plain"
+          },
+          "url": {
+            "path": [
+              "produtos"
+            ],
+            "host": [
+              "{{baseUrl}}"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Accept",
+              "value": "application/json"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "method": "POST",
+          "body": {
+            "mode": "raw",
+            "raw": "{\n  \"nome\": \"\",\n  \"preco\": -1,\n  \"estoque\": -1\n}",
+            "options": {
+              "raw": {
+                "language": "json"
+              }
+            }
+          }
+        },
+        "response": [],
+        "event": [
+          {
+            "listen": "test",
+            "script": {
+              "id": "2f549e40-6e93-41ec-a792-ec8212fbea29",
+              "type": "text/javascript",
+              "exec": [
+                "pm.test(\"HTTP 400\", () => pm.response.to.have.status(400));"
+              ],
+              "_lastExecutionId": "04579bcd-40a7-48ed-b38d-6505d99bd897"
+            }
+          }
+        ]
+      }
+    ],
+    "event": [],
+    "variable": [
+      {
+        "type": "any",
+        "value": "http://localhost:8080",
+        "key": "baseUrl"
+      },
+      {
+        "type": "any",
+        "value": "",
+        "key": "produtoJson"
+      },
+      {
+        "type": "any",
+        "value": "",
+        "key": "jsonBytes"
+      },
+      {
+        "type": "any",
+        "value": "",
+        "key": "idCriadoJson"
+      }
+    ],
+    "info": {
+      "_postman_id": "a01c4467-c25a-49ce-83f9-1583edb30a5f",
+      "name": "WebServicesLab — StockService | JSON e XML",
+      "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+      "description": {
+        "content": "Demonstração acadêmica SENAI. API local real, sem autenticação. Execute StockService antes de enviar. Requisições 03 e 04 em sequência comparam representações; 06 antes de 08. POST altera dados em memória; reinicie o servidor para restaurar a lista inicial. Testes são expectativas, não resultados executados.",
+        "type": "text/plain"
+      }
+    }
+  },
+  "environment": {
+    "_": {
+      "postman_variable_scope": "environment"
+    },
+    "id": "f81c154a-f719-400a-ad9e-ac3b5fca8ab9",
+    "name": "WebServicesLab — Produção",
+    "values": [
+      {
+        "type": "any",
+        "value": "https://stockservice-xmljson.azurewebsites.net",
+        "key": "baseUrl"
+      }
+    ]
+  },
+  "globals": {
+    "id": "307d89d2-8d71-49b9-afb6-fd634a03ecad",
+    "values": []
+  },
+  "run": {
+    "stats": {
+      "iterations": {
+        "total": 1,
+        "pending": 0,
+        "failed": 0
+      },
+      "items": {
+        "total": 12,
+        "pending": 0,
+        "failed": 0
+      },
+      "scripts": {
+        "total": 12,
+        "pending": 0,
+        "failed": 0
+      },
+      "prerequests": {
+        "total": 12,
+        "pending": 0,
+        "failed": 0
+      },
+      "requests": {
+        "total": 12,
+        "pending": 0,
+        "failed": 0
+      },
+      "tests": {
+        "total": 12,
+        "pending": 0,
+        "failed": 0
+      },
+      "assertions": {
+        "total": 37,
+        "pending": 0,
+        "failed": 0
+      },
+      "testScripts": {
+        "total": 12,
+        "pending": 0,
+        "failed": 0
+      },
+      "prerequestScripts": {
+        "total": 0,
+        "pending": 0,
+        "failed": 0
+      }
+    },
+    "timings": {
+      "responseAverage": 508.9166666666667,
+      "responseMin": 213,
+      "responseMax": 1237,
+      "responseSd": 239.31480603775623,
+      "dnsAverage": 0,
+      "dnsMin": 0,
+      "dnsMax": 0,
+      "dnsSd": 0,
+      "firstByteAverage": 0,
+      "firstByteMin": 0,
+      "firstByteMax": 0,
+      "firstByteSd": 0,
+      "started": 1795750744197,
+      "completed": 1795750751432
+    },
+    "executions": [
+      {
+        "cursor": {
+          "position": 0,
+          "iteration": 0,
+          "length": 12,
+          "cycles": 1,
+          "empty": false,
+          "eof": false,
+          "bof": true,
+          "cr": false,
+          "ref": "7fb75452-ff1b-48f0-b123-e67be2dd4a7a",
+          "httpRequestId": "a9fc2fc0-49df-487c-929a-b38548be1369"
+        },
+        "item": {
+          "id": "7a2d84ac-9ea5-4500-912f-1f36ae026fea",
+          "name": "01 - Listar produtos | JSON",
+          "request": {
+            "description": {
+              "content": "Lista em JSON. A raiz contém a propriedade produtos.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "produtos"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "92c2bd0f-3ee4-41ad-8177-7d62fb48392c",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Content-Type: application/json\", () => pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"));",
+                  "pm.test(\"Vary: Accept\", () => pm.expect(pm.response.headers.get(\"Vary\") || \"\").to.match(/\\bAccept\\b/i));",
+                  "pm.test(\"Coleção de produtos\", () => pm.expect(pm.response.json().produtos).to.be.an(\"array\").with.lengthOf.at.least(5));"
+                ],
+                "_lastExecutionId": "f90ef1ec-e79e-4131-bb19-c358d5a2cd58"
+              }
+            }
+          ]
+        },
+        "request": {
+          "description": {
+            "content": "Lista em JSON. A raiz contém a propriedade produtos.",
+            "type": "text/plain"
+          },
+          "url": {
+            "protocol": "https",
+            "path": [
+              "produtos"
+            ],
+            "host": [
+              "stockservice-xmljson",
+              "azurewebsites",
+              "net"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Accept",
+              "value": "application/json"
+            },
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "dac73cc4-f13c-4ce3-ae9f-f764e8b541b0",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "stockservice-xmljson.azurewebsites.net",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            }
+          ],
+          "method": "GET"
+        },
+        "response": {
+          "id": "edef4cc3-8234-4bee-8cb8-2c9325882557",
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Date",
+              "value": "Fri, 27 Nov 2026 03:39:08 GMT"
+            },
+            {
+              "key": "Transfer-Encoding",
+              "value": "chunked"
+            },
+            {
+              "key": "Vary",
+              "value": "Origin"
+            },
+            {
+              "key": "Vary",
+              "value": "Access-Control-Request-Method"
+            },
+            {
+              "key": "Vary",
+              "value": "Access-Control-Request-Headers"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              112,
+              114,
+              111,
+              100,
+              117,
+              116,
+              111,
+              115,
+              34,
+              58,
+              91,
+              123,
+              34,
+              105,
+              100,
+              34,
+              58,
+              49,
+              44,
+              34,
+              110,
+              111,
+              109,
+              101,
+              34,
+              58,
+              34,
+              78,
+              111,
+              116,
+              101,
+              98,
+              111,
+              111,
+              107,
+              34,
+              44,
+              34,
+              112,
+              114,
+              101,
+              99,
+              111,
+              34,
+              58,
+              50,
+              53,
+              48,
+              48,
+              46,
+              48,
+              48,
+              44,
+              34,
+              101,
+              115,
+              116,
+              111,
+              113,
+              117,
+              101,
+              34,
+              58,
+              49,
+              50,
+              125,
+              44,
+              123,
+              34,
+              105,
+              100,
+              34,
+              58,
+              50,
+              44,
+              34,
+              110,
+              111,
+              109,
+              101,
+              34,
+              58,
+              34,
+              77,
+              111,
+              117,
+              115,
+              101,
+              34,
+              44,
+              34,
+              112,
+              114,
+              101,
+              99,
+              111,
+              34,
+              58,
+              56,
+              57,
+              46,
+              57,
+              48,
+              44,
+              34,
+              101,
+              115,
+              116,
+              111,
+              113,
+              117,
+              101,
+              34,
+              58,
+              51,
+              48,
+              125,
+              44,
+              123,
+              34,
+              105,
+              100,
+              34,
+              58,
+              51,
+              44,
+              34,
+              110,
+              111,
+              109,
+              101,
+              34,
+              58,
+              34,
+              84,
+              101,
+              99,
+              108,
+              97,
+              100,
+              111,
+              34,
+              44,
+              34,
+              112,
+              114,
+              101,
+              99,
+              111,
+              34,
+              58,
+              49,
+              52,
+              57,
+              46,
+              57,
+              48,
+              44,
+              34,
+              101,
+              115,
+              116,
+              111,
+              113,
+              117,
+              101,
+              34,
+              58,
+              50,
+              48,
+              125,
+              44,
+              123,
+              34,
+              105,
+              100,
+              34,
+              58,
+              52,
+              44,
+              34,
+              110,
+              111,
+              109,
+              101,
+              34,
+              58,
+              34,
+              77,
+              111,
+              110,
+              105,
+              116,
+              111,
+              114,
+              34,
+              44,
+              34,
+              112,
+              114,
+              101,
+              99,
+              111,
+              34,
+              58,
+              56,
+              57,
+              57,
+              46,
+              57,
+              48,
+              44,
+              34,
+              101,
+              115,
+              116,
+              111,
+              113,
+              117,
+              101,
+              34,
+              58,
+              56,
+              125,
+              44,
+              123,
+              34,
+              105,
+              100,
+              34,
+              58,
+              53,
+              44,
+              34,
+              110,
+              111,
+              109,
+              101,
+              34,
+              58,
+              34,
+              72,
+              101,
+              97,
+              100,
+              115,
+              101,
+              116,
+              34,
+              44,
+              34,
+              112,
+              114,
+              101,
+              99,
+              111,
+              34,
+              58,
+              49,
+              57,
+              57,
+              46,
+              57,
+              48,
+              44,
+              34,
+              101,
+              115,
+              116,
+              111,
+              113,
+              117,
+              101,
+              34,
+              58,
+              49,
+              53,
+              125,
+              44,
+              123,
+              34,
+              105,
+              100,
+              34,
+              58,
+              54,
+              44,
+              34,
+              110,
+              111,
+              109,
+              101,
+              34,
+              58,
+              34,
+              68,
+              101,
+              109,
+              111,
+              32,
+              100,
+              101,
+              112,
+              108,
+              111,
+              121,
+              32,
+              74,
+              83,
+              79,
+              78,
+              34,
+              44,
+              34,
+              112,
+              114,
+              101,
+              99,
+              111,
+              34,
+              58,
+              49,
+              50,
+              46,
+              53,
+              48,
+              44,
+              34,
+              101,
+              115,
+              116,
+              111,
+              113,
+              117,
+              101,
+              34,
+              58,
+              51,
+              125,
+              44,
+              123,
+              34,
+              105,
+              100,
+              34,
+              58,
+              55,
+              44,
+              34,
+              110,
+              111,
+              109,
+              101,
+              34,
+              58,
+              34,
+              68,
+              101,
+              109,
+              111,
+              32,
+              100,
+              101,
+              112,
+              108,
+              111,
+              121,
+              32,
+              88,
+              77,
+              76,
+              34,
+              44,
+              34,
+              112,
+              114,
+              101,
+              99,
+              111,
+              34,
+              58,
+              50,
+              48,
+              46,
+              48,
+              48,
+              44,
+              34,
+              101,
+              115,
+              116,
+              111,
+              113,
+              117,
+              101,
+              34,
+              58,
+              52,
+              125,
+              93,
+              125
+            ]
+          },
+          "cookie": [],
+          "responseTime": 1237,
+          "responseSize": 403
+        },
+        "id": "7a2d84ac-9ea5-4500-912f-1f36ae026fea",
+        "assertions": [
+          {
+            "assertion": "HTTP 200",
+            "skipped": false
+          },
+          {
+            "assertion": "Content-Type: application/json",
+            "skipped": false
+          },
+          {
+            "assertion": "Vary: Accept",
+            "skipped": false
+          },
+          {
+            "assertion": "Coleção de produtos",
+            "skipped": false
+          }
+        ]
+      },
+      {
+        "cursor": {
+          "ref": "24a30753-f457-4a9f-bc13-88bfd15283ff",
+          "length": 12,
+          "cycles": 1,
+          "position": 1,
+          "iteration": 0,
+          "httpRequestId": "44053d15-fe21-4f5d-84a7-92bdffcd9ed5"
+        },
+        "item": {
+          "id": "a7e00caa-b6c2-4196-ba7a-5c099c76cabc",
+          "name": "02 - Listar produtos | XML",
+          "request": {
+            "description": {
+              "content": "Mesma URL e método, alterando somente Accept. Raiz produtos e elementos produto.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "produtos"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/xml"
+              }
+            ],
+            "method": "GET"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "7529c556-5cb1-4bc4-8538-8a77f36231c7",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Content-Type: application/xml\", () => pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/xml\"));",
+                  "pm.test(\"Vary: Accept\", () => pm.expect(pm.response.headers.get(\"Vary\") || \"\").to.match(/\\bAccept\\b/i));",
+                  "pm.test(\"Coleção XML\", () => { const p = xml2Json(pm.response.text()).produtos.produto; pm.expect(p).to.be.an(\"array\").with.lengthOf.at.least(5); });"
+                ],
+                "_lastExecutionId": "603bd440-615e-43ce-9183-bc3d2e8ed30b"
+              }
+            }
+          ]
+        },
+        "request": {
+          "description": {
+            "content": "Mesma URL e método, alterando somente Accept. Raiz produtos e elementos produto.",
+            "type": "text/plain"
+          },
+          "url": {
+            "protocol": "https",
+            "path": [
+              "produtos"
+            ],
+            "host": [
+              "stockservice-xmljson",
+              "azurewebsites",
+              "net"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Accept",
+              "value": "application/xml"
+            },
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "d9c678fb-f798-41c2-b992-be0e92b50e53",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "stockservice-xmljson.azurewebsites.net",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            }
+          ],
+          "method": "GET"
+        },
+        "response": {
+          "id": "ef0334b6-7a1c-4564-ad72-4bd0c7ca3e87",
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/xml"
+            },
+            {
+              "key": "Date",
+              "value": "Fri, 27 Nov 2026 03:39:08 GMT"
+            },
+            {
+              "key": "Transfer-Encoding",
+              "value": "chunked"
+            },
+            {
+              "key": "Vary",
+              "value": "Origin"
+            },
+            {
+              "key": "Vary",
+              "value": "Access-Control-Request-Method"
+            },
+            {
+              "key": "Vary",
+              "value": "Access-Control-Request-Headers"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              60,
+              112,
+              114,
+              111,
+              100,
+              117,
+              116,
+              111,
+              115,
+              62,
+              60,
+              112,
+              114,
+              111,
+              100,
+              117,
+              116,
+              111,
+              62,
+              60,
+              105,
+              100,
+              62,
+              49,
+              60,
+              47,
+              105,
+              100,
+              62,
+              60,
+              110,
+              111,
+              109,
+              101,
+              62,
+              78,
+              111,
+              116,
+              101,
+              98,
+              111,
+              111,
+              107,
+              60,
+              47,
+              110,
+              111,
+              109,
+              101,
+              62,
+              60,
+              112,
+              114,
+              101,
+              99,
+              111,
+              62,
+              50,
+              53,
+              48,
+              48,
+              46,
+              48,
+              48,
+              60,
+              47,
+              112,
+              114,
+              101,
+              99,
+              111,
+              62,
+              60,
+              101,
+              115,
+              116,
+              111,
+              113,
+              117,
+              101,
+              62,
+              49,
+              50,
+              60,
+              47,
+              101,
+              115,
+              116,
+              111,
+              113,
+              117,
+              101,
+              62,
+              60,
+              47,
+              112,
+              114,
+              111,
+              100,
+              117,
+              116,
+              111,
+              62,
+              60,
+              112,
+              114,
+              111,
+              100,
+              117,
+              116,
+              111,
+              62,
+              60,
+              105,
+              100,
+              62,
+              50,
+              60,
+              47,
+              105,
+              100,
+              62,
+              60,
+              110,
+              111,
+              109,
+              101,
+              62,
+              77,
+              111,
+              117,
+              115,
+              101,
+              60,
+              47,
+              110,
+              111,
+              109,
+              101,
+              62,
+              60,
+              112,
+              114,
+              101,
+              99,
+              111,
+              62,
+              56,
+              57,
+              46,
+              57,
+              48,
+              60,
+              47,
+              112,
+              114,
+              101,
+              99,
+              111,
+              62,
+              60,
+              101,
+              115,
+              116,
+              111,
+              113,
+              117,
+              101,
+              62,
+              51,
+              48,
+              60,
+              47,
+              101,
+              115,
+              116,
+              111,
+              113,
+              117,
+              101,
+              62,
+              60,
+              47,
+              112,
+              114,
+              111,
+              100,
+              117,
+              116,
+              111,
+              62,
+              60,
+              112,
+              114,
+              111,
+              100,
+              117,
+              116,
+              111,
+              62,
+              60,
+              105,
+              100,
+              62,
+              51,
+              60,
+              47,
+              105,
+              100,
+              62,
+              60,
+              110,
+              111,
+              109,
+              101,
+              62,
+              84,
+              101,
+              99,
+              108,
+              97,
+              100,
+              111,
+              60,
+              47,
+              110,
+              111,
+              109,
+              101,
+              62,
+              60,
+              112,
+              114,
+              101,
+              99,
+              111,
+              62,
+              49,
+              52,
+              57,
+              46,
+              57,
+              48,
+              60,
+              47,
+              112,
+              114,
+              101,
+              99,
+              111,
+              62,
+              60,
+              101,
+              115,
+              116,
+              111,
+              113,
+              117,
+              101,
+              62,
+              50,
+              48,
+              60,
+              47,
+              101,
+              115,
+              116,
+              111,
+              113,
+              117,
+              101,
+              62,
+              60,
+              47,
+              112,
+              114,
+              111,
+              100,
+              117,
+              116,
+              111,
+              62,
+              60,
+              112,
+              114,
+              111,
+              100,
+              117,
+              116,
+              111,
+              62,
+              60,
+              105,
+              100,
+              62,
+              52,
+              60,
+              47,
+              105,
+              100,
+              62,
+              60,
+              110,
+              111,
+              109,
+              101,
+              62,
+              77,
+              111,
+              110,
+              105,
+              116,
+              111,
+              114,
+              60,
+              47,
+              110,
+              111,
+              109,
+              101,
+              62,
+              60,
+              112,
+              114,
+              101,
+              99,
+              111,
+              62,
+              56,
+              57,
+              57,
+              46,
+              57,
+              48,
+              60,
+              47,
+              112,
+              114,
+              101,
+              99,
+              111,
+              62,
+              60,
+              101,
+              115,
+              116,
+              111,
+              113,
+              117,
+              101,
+              62,
+              56,
+              60,
+              47,
+              101,
+              115,
+              116,
+              111,
+              113,
+              117,
+              101,
+              62,
+              60,
+              47,
+              112,
+              114,
+              111,
+              100,
+              117,
+              116,
+              111,
+              62,
+              60,
+              112,
+              114,
+              111,
+              100,
+              117,
+              116,
+              111,
+              62,
+              60,
+              105,
+              100,
+              62,
+              53,
+              60,
+              47,
+              105,
+              100,
+              62,
+              60,
+              110,
+              111,
+              109,
+              101,
+              62,
+              72,
+              101,
+              97,
+              100,
+              115,
+              101,
+              116,
+              60,
+              47,
+              110,
+              111,
+              109,
+              101,
+              62,
+              60,
+              112,
+              114,
+              101,
+              99,
+              111,
+              62,
+              49,
+              57,
+              57,
+              46,
+              57,
+              48,
+              60,
+              47,
+              112,
+              114,
+              101,
+              99,
+              111,
+              62,
+              60,
+              101,
+              115,
+              116,
+              111,
+              113,
+              117,
+              101,
+              62,
+              49,
+              53,
+              60,
+              47,
+              101,
+              115,
+              116,
+              111,
+              113,
+              117,
+              101,
+              62,
+              60,
+              47,
+              112,
+              114,
+              111,
+              100,
+              117,
+              116,
+              111,
+              62,
+              60,
+              112,
+              114,
+              111,
+              100,
+              117,
+              116,
+              111,
+              62,
+              60,
+              105,
+              100,
+              62,
+              54,
+              60,
+              47,
+              105,
+              100,
+              62,
+              60,
+              110,
+              111,
+              109,
+              101,
+              62,
+              68,
+              101,
+              109,
+              111,
+              32,
+              100,
+              101,
+              112,
+              108,
+              111,
+              121,
+              32,
+              74,
+              83,
+              79,
+              78,
+              60,
+              47,
+              110,
+              111,
+              109,
+              101,
+              62,
+              60,
+              112,
+              114,
+              101,
+              99,
+              111,
+              62,
+              49,
+              50,
+              46,
+              53,
+              48,
+              60,
+              47,
+              112,
+              114,
+              101,
+              99,
+              111,
+              62,
+              60,
+              101,
+              115,
+              116,
+              111,
+              113,
+              117,
+              101,
+              62,
+              51,
+              60,
+              47,
+              101,
+              115,
+              116,
+              111,
+              113,
+              117,
+              101,
+              62,
+              60,
+              47,
+              112,
+              114,
+              111,
+              100,
+              117,
+              116,
+              111,
+              62,
+              60,
+              112,
+              114,
+              111,
+              100,
+              117,
+              116,
+              111,
+              62,
+              60,
+              105,
+              100,
+              62,
+              55,
+              60,
+              47,
+              105,
+              100,
+              62,
+              60,
+              110,
+              111,
+              109,
+              101,
+              62,
+              68,
+              101,
+              109,
+              111,
+              32,
+              100,
+              101,
+              112,
+              108,
+              111,
+              121,
+              32,
+              88,
+              77,
+              76,
+              60,
+              47,
+              110,
+              111,
+              109,
+              101,
+              62,
+              60,
+              112,
+              114,
+              101,
+              99,
+              111,
+              62,
+              50,
+              48,
+              46,
+              48,
+              48,
+              60,
+              47,
+              112,
+              114,
+              101,
+              99,
+              111,
+              62,
+              60,
+              101,
+              115,
+              116,
+              111,
+              113,
+              117,
+              101,
+              62,
+              52,
+              60,
+              47,
+              101,
+              115,
+              116,
+              111,
+              113,
+              117,
+              101,
+              62,
+              60,
+              47,
+              112,
+              114,
+              111,
+              100,
+              117,
+              116,
+              111,
+              62,
+              60,
+              47,
+              112,
+              114,
+              111,
+              100,
+              117,
+              116,
+              111,
+              115,
+              62
+            ]
+          },
+          "cookie": [],
+          "responseTime": 533,
+          "responseSize": 669
+        },
+        "id": "a7e00caa-b6c2-4196-ba7a-5c099c76cabc",
+        "assertions": [
+          {
+            "assertion": "HTTP 200",
+            "skipped": false
+          },
+          {
+            "assertion": "Content-Type: application/xml",
+            "skipped": false
+          },
+          {
+            "assertion": "Vary: Accept",
+            "skipped": false
+          },
+          {
+            "assertion": "Coleção XML",
+            "skipped": false
+          }
+        ]
+      },
+      {
+        "cursor": {
+          "ref": "15238a2e-6c04-4056-af90-90cc83d080f8",
+          "length": 12,
+          "cycles": 1,
+          "position": 2,
+          "iteration": 0,
+          "httpRequestId": "b67b2960-38b7-4485-a691-4bf9e4bd5dd3"
+        },
+        "item": {
+          "id": "7698925c-4f5c-49b6-938a-5d74c224ca39",
+          "name": "03 - Consultar Notebook | JSON",
+          "request": {
+            "description": {
+              "content": "Salva dados e tamanho para comparação com a próxima requisição.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "produtos",
+                "1"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "39434496-dd9c-44d1-a06b-b350f69cb71d",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Content-Type: application/json\", () => pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"));",
+                  "pm.test(\"Vary: Accept\", () => pm.expect(pm.response.headers.get(\"Vary\") || \"\").to.match(/\\bAccept\\b/i));",
+                  "pm.test(\"Dados do Notebook\", () => { const p = pm.response.json(); pm.expect(p.id).to.eql(1); pm.expect(p.nome).to.eql(\"Notebook\"); pm.expect(p.preco).to.eql(2500); pm.expect(p.estoque).to.eql(12); });",
+                  "if (pm.response.code === 200) { const p = pm.response.json(); pm.collectionVariables.set(\"produtoJson\", JSON.stringify({id:p.id,nome:p.nome,preco:p.preco,estoque:p.estoque})); pm.collectionVariables.set(\"jsonBytes\", unescape(encodeURIComponent(pm.response.text())).length.toString()); }"
+                ],
+                "_lastExecutionId": "47ae46bd-3712-4e4a-ad21-0361c747673b"
+              }
+            }
+          ]
+        },
+        "request": {
+          "description": {
+            "content": "Salva dados e tamanho para comparação com a próxima requisição.",
+            "type": "text/plain"
+          },
+          "url": {
+            "protocol": "https",
+            "path": [
+              "produtos",
+              "1"
+            ],
+            "host": [
+              "stockservice-xmljson",
+              "azurewebsites",
+              "net"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Accept",
+              "value": "application/json"
+            },
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "7ebe4b30-4e8f-4a74-9313-fb5772094bec",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "stockservice-xmljson.azurewebsites.net",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            }
+          ],
+          "method": "GET"
+        },
+        "response": {
+          "id": "e356dec3-c95a-4ae4-9aab-7eb1d6053537",
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Date",
+              "value": "Fri, 27 Nov 2026 03:39:09 GMT"
+            },
+            {
+              "key": "Transfer-Encoding",
+              "value": "chunked"
+            },
+            {
+              "key": "Vary",
+              "value": "Origin"
+            },
+            {
+              "key": "Vary",
+              "value": "Access-Control-Request-Method"
+            },
+            {
+              "key": "Vary",
+              "value": "Access-Control-Request-Headers"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              105,
+              100,
+              34,
+              58,
+              49,
+              44,
+              34,
+              110,
+              111,
+              109,
+              101,
+              34,
+              58,
+              34,
+              78,
+              111,
+              116,
+              101,
+              98,
+              111,
+              111,
+              107,
+              34,
+              44,
+              34,
+              112,
+              114,
+              101,
+              99,
+              111,
+              34,
+              58,
+              50,
+              53,
+              48,
+              48,
+              46,
+              48,
+              48,
+              44,
+              34,
+              101,
+              115,
+              116,
+              111,
+              113,
+              117,
+              101,
+              34,
+              58,
+              49,
+              50,
+              125
+            ]
+          },
+          "cookie": [],
+          "responseTime": 213,
+          "responseSize": 55
+        },
+        "id": "7698925c-4f5c-49b6-938a-5d74c224ca39",
+        "assertions": [
+          {
+            "assertion": "HTTP 200",
+            "skipped": false
+          },
+          {
+            "assertion": "Content-Type: application/json",
+            "skipped": false
+          },
+          {
+            "assertion": "Vary: Accept",
+            "skipped": false
+          },
+          {
+            "assertion": "Dados do Notebook",
+            "skipped": false
+          }
+        ]
+      },
+      {
+        "cursor": {
+          "ref": "a8822fbb-4a5e-4905-bf5c-3c92b2aa88f1",
+          "length": 12,
+          "cycles": 1,
+          "position": 3,
+          "iteration": 0,
+          "httpRequestId": "5ed82795-9734-496a-bb3f-ea4b0544b788"
+        },
+        "item": {
+          "id": "8d6878e9-1b21-4da2-b052-3455e1c40819",
+          "name": "04 - Consultar Notebook | XML e comparar",
+          "request": {
+            "description": {
+              "content": "Execute após 03 para comparar os valores e o tamanho UTF-8 do corpo textual. Veja Test Results e Postman Console.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "produtos",
+                "1"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/xml"
+              }
+            ],
+            "method": "GET"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "653274a1-e8b8-4e65-95f6-177464eadece",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Content-Type: application/xml\", () => pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/xml\"));",
+                  "pm.test(\"Vary: Accept\", () => pm.expect(pm.response.headers.get(\"Vary\") || \"\").to.match(/\\bAccept\\b/i));",
+                  "pm.test(\"Dados do Notebook\", () => { const p = xml2Json(pm.response.text()).produto; pm.expect(Number(p.id)).to.eql(1); pm.expect(p.nome).to.eql(\"Notebook\"); pm.expect(Number(p.preco)).to.eql(2500); pm.expect(Number(p.estoque)).to.eql(12); });",
+                  "pm.test(\"Equivalência com JSON da requisição 03\", () => { const anterior = pm.collectionVariables.get(\"produtoJson\"); pm.expect(anterior, \"Execute a requisição 03 antes\").to.be.ok; const p = xml2Json(pm.response.text()).produto; pm.expect({id:Number(p.id),nome:p.nome,preco:Number(p.preco),estoque:Number(p.estoque)}).to.deep.eql(JSON.parse(anterior)); });",
+                  "console.log(\"JSON (bytes UTF-8):\", pm.collectionVariables.get(\"jsonBytes\"), \"XML (bytes UTF-8):\", unescape(encodeURIComponent(pm.response.text())).length);"
+                ],
+                "_lastExecutionId": "dcb2f2a0-aea5-4a40-bab2-7a3c396cf757"
+              }
+            }
+          ]
+        },
+        "request": {
+          "description": {
+            "content": "Execute após 03 para comparar os valores e o tamanho UTF-8 do corpo textual. Veja Test Results e Postman Console.",
+            "type": "text/plain"
+          },
+          "url": {
+            "protocol": "https",
+            "path": [
+              "produtos",
+              "1"
+            ],
+            "host": [
+              "stockservice-xmljson",
+              "azurewebsites",
+              "net"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Accept",
+              "value": "application/xml"
+            },
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "7926186d-965d-4753-9ad1-07af68487ad7",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "stockservice-xmljson.azurewebsites.net",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            }
+          ],
+          "method": "GET"
+        },
+        "response": {
+          "id": "d3d1547b-313c-4b88-82cd-026746230b6a",
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/xml"
+            },
+            {
+              "key": "Date",
+              "value": "Fri, 27 Nov 2026 03:39:09 GMT"
+            },
+            {
+              "key": "Transfer-Encoding",
+              "value": "chunked"
+            },
+            {
+              "key": "Vary",
+              "value": "Origin"
+            },
+            {
+              "key": "Vary",
+              "value": "Access-Control-Request-Method"
+            },
+            {
+              "key": "Vary",
+              "value": "Access-Control-Request-Headers"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              60,
+              112,
+              114,
+              111,
+              100,
+              117,
+              116,
+              111,
+              62,
+              60,
+              105,
+              100,
+              62,
+              49,
+              60,
+              47,
+              105,
+              100,
+              62,
+              60,
+              110,
+              111,
+              109,
+              101,
+              62,
+              78,
+              111,
+              116,
+              101,
+              98,
+              111,
+              111,
+              107,
+              60,
+              47,
+              110,
+              111,
+              109,
+              101,
+              62,
+              60,
+              112,
+              114,
+              101,
+              99,
+              111,
+              62,
+              50,
+              53,
+              48,
+              48,
+              46,
+              48,
+              48,
+              60,
+              47,
+              112,
+              114,
+              101,
+              99,
+              111,
+              62,
+              60,
+              101,
+              115,
+              116,
+              111,
+              113,
+              117,
+              101,
+              62,
+              49,
+              50,
+              60,
+              47,
+              101,
+              115,
+              116,
+              111,
+              113,
+              117,
+              101,
+              62,
+              60,
+              47,
+              112,
+              114,
+              111,
+              100,
+              117,
+              116,
+              111,
+              62
+            ]
+          },
+          "cookie": [],
+          "responseTime": 327,
+          "responseSize": 93
+        },
+        "id": "8d6878e9-1b21-4da2-b052-3455e1c40819",
+        "assertions": [
+          {
+            "assertion": "HTTP 200",
+            "skipped": false
+          },
+          {
+            "assertion": "Content-Type: application/xml",
+            "skipped": false
+          },
+          {
+            "assertion": "Vary: Accept",
+            "skipped": false
+          },
+          {
+            "assertion": "Dados do Notebook",
+            "skipped": false
+          },
+          {
+            "assertion": "Equivalência com JSON da requisição 03",
+            "skipped": false
+          }
+        ]
+      },
+      {
+        "cursor": {
+          "ref": "27287f74-c921-46ac-84b9-1e27dac56ac0",
+          "length": 12,
+          "cycles": 1,
+          "position": 4,
+          "iteration": 0,
+          "httpRequestId": "648956b8-ea05-4d0f-8ca4-eb63f8b1fdfa"
+        },
+        "item": {
+          "id": "9ce474e7-45e1-4756-94d5-8096c6ec0d26",
+          "name": "05 - JSON por padrão",
+          "request": {
+            "description": {
+              "content": "Accept genérico: o servidor seleciona JSON como padrão.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "produtos",
+                "1"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "e996fb04-30d4-4885-93a1-cb788fbfef87",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Content-Type: application/json\", () => pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"));",
+                  "pm.test(\"Vary: Accept\", () => pm.expect(pm.response.headers.get(\"Vary\") || \"\").to.match(/\\bAccept\\b/i));",
+                  "pm.test(\"Dados do Notebook\", () => { const p = pm.response.json(); pm.expect(p.id).to.eql(1); pm.expect(p.nome).to.eql(\"Notebook\"); pm.expect(p.preco).to.eql(2500); pm.expect(p.estoque).to.eql(12); });"
+                ],
+                "_lastExecutionId": "dbf4092f-3873-468e-82e7-d4139e63ee41"
+              }
+            }
+          ]
+        },
+        "request": {
+          "description": {
+            "content": "Accept genérico: o servidor seleciona JSON como padrão.",
+            "type": "text/plain"
+          },
+          "url": {
+            "protocol": "https",
+            "path": [
+              "produtos",
+              "1"
+            ],
+            "host": [
+              "stockservice-xmljson",
+              "azurewebsites",
+              "net"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Accept",
+              "value": "*/*"
+            },
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "21f10e9c-9019-4012-af03-7db3be1a9ab8",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "stockservice-xmljson.azurewebsites.net",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            }
+          ],
+          "method": "GET"
+        },
+        "response": {
+          "id": "d9472609-f034-4f83-a415-aad307a75e4e",
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Date",
+              "value": "Fri, 27 Nov 2026 03:39:10 GMT"
+            },
+            {
+              "key": "Transfer-Encoding",
+              "value": "chunked"
+            },
+            {
+              "key": "Vary",
+              "value": "Origin"
+            },
+            {
+              "key": "Vary",
+              "value": "Access-Control-Request-Method"
+            },
+            {
+              "key": "Vary",
+              "value": "Access-Control-Request-Headers"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              105,
+              100,
+              34,
+              58,
+              49,
+              44,
+              34,
+              110,
+              111,
+              109,
+              101,
+              34,
+              58,
+              34,
+              78,
+              111,
+              116,
+              101,
+              98,
+              111,
+              111,
+              107,
+              34,
+              44,
+              34,
+              112,
+              114,
+              101,
+              99,
+              111,
+              34,
+              58,
+              50,
+              53,
+              48,
+              48,
+              46,
+              48,
+              48,
+              44,
+              34,
+              101,
+              115,
+              116,
+              111,
+              113,
+              117,
+              101,
+              34,
+              58,
+              49,
+              50,
+              125
+            ]
+          },
+          "cookie": [],
+          "responseTime": 438,
+          "responseSize": 55
+        },
+        "id": "9ce474e7-45e1-4756-94d5-8096c6ec0d26",
+        "assertions": [
+          {
+            "assertion": "HTTP 200",
+            "skipped": false
+          },
+          {
+            "assertion": "Content-Type: application/json",
+            "skipped": false
+          },
+          {
+            "assertion": "Vary: Accept",
+            "skipped": false
+          },
+          {
+            "assertion": "Dados do Notebook",
+            "skipped": false
+          }
+        ]
+      },
+      {
+        "cursor": {
+          "ref": "d1cd729c-0079-48fa-b55d-4ec297bb0078",
+          "length": 12,
+          "cycles": 1,
+          "position": 5,
+          "iteration": 0,
+          "httpRequestId": "71c89c2a-a86f-4ad9-b6f4-edc34cd8105f"
+        },
+        "item": {
+          "id": "686ae1fb-383f-44f1-bd51-60a7d0fb4815",
+          "name": "06 - Cadastrar produto | JSON",
+          "request": {
+            "description": {
+              "content": "Demonstra desserialização JSON no Java. Adiciona produto em memória.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "produtos"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Webcam HD\",\n  \"preco\": 249.9,\n  \"estoque\": 10\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "42c4cfdb-794a-477b-9717-5625af65260e",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 201\", () => pm.response.to.have.status(201));",
+                  "pm.test(\"Content-Type: application/json\", () => pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"));",
+                  "pm.test(\"Vary: Accept\", () => pm.expect(pm.response.headers.get(\"Vary\") || \"\").to.match(/\\bAccept\\b/i));",
+                  "pm.test(\"Produto cadastrado\", () => { const p = pm.response.json(); pm.expect(p.id).to.be.a(\"number\"); pm.expect(p.nome).to.eql(\"Webcam HD\"); pm.expect(p.preco).to.eql(249.9); pm.expect(p.estoque).to.eql(10); });",
+                  "if(pm.response.code===201) pm.collectionVariables.set(\"idCriadoJson\",String(pm.response.json().id));"
+                ],
+                "_lastExecutionId": "b162720e-3db0-4c91-ac4a-bb57490ccac4"
+              }
+            }
+          ]
+        },
+        "request": {
+          "description": {
+            "content": "Demonstra desserialização JSON no Java. Adiciona produto em memória.",
+            "type": "text/plain"
+          },
+          "url": {
+            "protocol": "https",
+            "path": [
+              "produtos"
+            ],
+            "host": [
+              "stockservice-xmljson",
+              "azurewebsites",
+              "net"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Accept",
+              "value": "application/json"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "248bb744-d6d2-4e4b-84f7-961f4b2ba0be",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "stockservice-xmljson.azurewebsites.net",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            },
+            {
+              "key": "Content-Length",
+              "value": "60",
+              "system": true
+            }
+          ],
+          "method": "POST",
+          "body": {
+            "mode": "raw",
+            "raw": "{\n  \"nome\": \"Webcam HD\",\n  \"preco\": 249.9,\n  \"estoque\": 10\n}",
+            "options": {
+              "raw": {
+                "language": "json"
+              }
+            }
+          }
+        },
+        "response": {
+          "id": "e27170b1-07ff-4a09-a4fa-89ceaecc9cb9",
+          "status": "Created",
+          "code": 201,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Date",
+              "value": "Fri, 27 Nov 2026 03:39:10 GMT"
+            },
+            {
+              "key": "Transfer-Encoding",
+              "value": "chunked"
+            },
+            {
+              "key": "Vary",
+              "value": "Origin"
+            },
+            {
+              "key": "Vary",
+              "value": "Access-Control-Request-Method"
+            },
+            {
+              "key": "Vary",
+              "value": "Access-Control-Request-Headers"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              105,
+              100,
+              34,
+              58,
+              56,
+              44,
+              34,
+              110,
+              111,
+              109,
+              101,
+              34,
+              58,
+              34,
+              87,
+              101,
+              98,
+              99,
+              97,
+              109,
+              32,
+              72,
+              68,
+              34,
+              44,
+              34,
+              112,
+              114,
+              101,
+              99,
+              111,
+              34,
+              58,
+              50,
+              52,
+              57,
+              46,
+              57,
+              48,
+              44,
+              34,
+              101,
+              115,
+              116,
+              111,
+              113,
+              117,
+              101,
+              34,
+              58,
+              49,
+              48,
+              125
+            ]
+          },
+          "cookie": [],
+          "responseTime": 525,
+          "responseSize": 55
+        },
+        "id": "686ae1fb-383f-44f1-bd51-60a7d0fb4815",
+        "assertions": [
+          {
+            "assertion": "HTTP 201",
+            "skipped": false
+          },
+          {
+            "assertion": "Content-Type: application/json",
+            "skipped": false
+          },
+          {
+            "assertion": "Vary: Accept",
+            "skipped": false
+          },
+          {
+            "assertion": "Produto cadastrado",
+            "skipped": false
+          }
+        ]
+      },
+      {
+        "cursor": {
+          "ref": "7d5bf5b1-4ecd-46f5-804f-26ddbd5319b2",
+          "length": 12,
+          "cycles": 1,
+          "position": 6,
+          "iteration": 0,
+          "httpRequestId": "56b53b50-c932-4c72-b8d8-cf8e65438b56"
+        },
+        "item": {
+          "id": "fc56b647-ade4-4542-bf9a-2b9760c18c1a",
+          "name": "07 - Cadastrar produto | XML",
+          "request": {
+            "description": {
+              "content": "Demonstra desserialização XML no Java.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "produtos"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/xml"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/xml"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "<produto>\n  <nome>Mousepad Gamer</nome>\n  <preco>79.90</preco>\n  <estoque>25</estoque>\n</produto>",
+              "options": {
+                "raw": {
+                  "language": "xml"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "c8bb4811-d4b1-4644-a6f2-0189c86da52b",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 201\", () => pm.response.to.have.status(201));",
+                  "pm.test(\"Content-Type: application/xml\", () => pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/xml\"));",
+                  "pm.test(\"Vary: Accept\", () => pm.expect(pm.response.headers.get(\"Vary\") || \"\").to.match(/\\bAccept\\b/i));",
+                  "pm.test(\"Produto cadastrado\", () => { const p = xml2Json(pm.response.text()).produto; pm.expect(Number(p.id)).to.be.above(5); pm.expect(p.nome).to.eql(\"Mousepad Gamer\"); pm.expect(Number(p.preco)).to.eql(79.9); pm.expect(Number(p.estoque)).to.eql(25); });"
+                ],
+                "_lastExecutionId": "78b7c0f6-9e65-444e-a492-ee8f0b80f295"
+              }
+            }
+          ]
+        },
+        "request": {
+          "description": {
+            "content": "Demonstra desserialização XML no Java.",
+            "type": "text/plain"
+          },
+          "url": {
+            "protocol": "https",
+            "path": [
+              "produtos"
+            ],
+            "host": [
+              "stockservice-xmljson",
+              "azurewebsites",
+              "net"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Accept",
+              "value": "application/xml"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/xml"
+            },
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "bb9dbb6a-9dcc-4160-aa7a-c48ba19cee19",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "stockservice-xmljson.azurewebsites.net",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            },
+            {
+              "key": "Content-Length",
+              "value": "97",
+              "system": true
+            }
+          ],
+          "method": "POST",
+          "body": {
+            "mode": "raw",
+            "raw": "<produto>\n  <nome>Mousepad Gamer</nome>\n  <preco>79.90</preco>\n  <estoque>25</estoque>\n</produto>",
+            "options": {
+              "raw": {
+                "language": "xml"
+              }
+            }
+          }
+        },
+        "response": {
+          "id": "0585e2d6-d6d7-428c-914b-84e42b942045",
+          "status": "Created",
+          "code": 201,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/xml"
+            },
+            {
+              "key": "Date",
+              "value": "Fri, 27 Nov 2026 03:39:11 GMT"
+            },
+            {
+              "key": "Transfer-Encoding",
+              "value": "chunked"
+            },
+            {
+              "key": "Vary",
+              "value": "Origin"
+            },
+            {
+              "key": "Vary",
+              "value": "Access-Control-Request-Method"
+            },
+            {
+              "key": "Vary",
+              "value": "Access-Control-Request-Headers"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              60,
+              112,
+              114,
+              111,
+              100,
+              117,
+              116,
+              111,
+              62,
+              60,
+              105,
+              100,
+              62,
+              57,
+              60,
+              47,
+              105,
+              100,
+              62,
+              60,
+              110,
+              111,
+              109,
+              101,
+              62,
+              77,
+              111,
+              117,
+              115,
+              101,
+              112,
+              97,
+              100,
+              32,
+              71,
+              97,
+              109,
+              101,
+              114,
+              60,
+              47,
+              110,
+              111,
+              109,
+              101,
+              62,
+              60,
+              112,
+              114,
+              101,
+              99,
+              111,
+              62,
+              55,
+              57,
+              46,
+              57,
+              48,
+              60,
+              47,
+              112,
+              114,
+              101,
+              99,
+              111,
+              62,
+              60,
+              101,
+              115,
+              116,
+              111,
+              113,
+              117,
+              101,
+              62,
+              50,
+              53,
+              60,
+              47,
+              101,
+              115,
+              116,
+              111,
+              113,
+              117,
+              101,
+              62,
+              60,
+              47,
+              112,
+              114,
+              111,
+              100,
+              117,
+              116,
+              111,
+              62
+            ]
+          },
+          "cookie": [],
+          "responseTime": 453,
+          "responseSize": 97
+        },
+        "id": "fc56b647-ade4-4542-bf9a-2b9760c18c1a",
+        "assertions": [
+          {
+            "assertion": "HTTP 201",
+            "skipped": false
+          },
+          {
+            "assertion": "Content-Type: application/xml",
+            "skipped": false
+          },
+          {
+            "assertion": "Vary: Accept",
+            "skipped": false
+          },
+          {
+            "assertion": "Produto cadastrado",
+            "skipped": false
+          }
+        ]
+      },
+      {
+        "cursor": {
+          "ref": "9a762217-d508-43c9-9ee1-60ac896dbc18",
+          "length": 12,
+          "cycles": 1,
+          "position": 7,
+          "iteration": 0,
+          "httpRequestId": "a376a83b-0071-4243-914a-6f7b889d2c79"
+        },
+        "item": {
+          "id": "87e390e8-f2f3-4011-b668-b0fe8defc554",
+          "name": "08 - Consultar cadastro JSON em XML",
+          "request": {
+            "description": {
+              "content": "Execute após 06. O produto criado por JSON pode ser consultado em XML.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "produtos",
+                "{{idCriadoJson}}"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/xml"
+              }
+            ],
+            "method": "GET"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "d09d4286-d1f1-41a9-8b79-722f777734f9",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Content-Type: application/xml\", () => pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/xml\"));",
+                  "pm.test(\"Vary: Accept\", () => pm.expect(pm.response.headers.get(\"Vary\") || \"\").to.match(/\\bAccept\\b/i));",
+                  "pm.test(\"Mesmo produto criado por JSON\", () => { const p = xml2Json(pm.response.text()).produto; pm.expect(Number(p.id)).to.eql(Number(pm.collectionVariables.get(\"idCriadoJson\"))); pm.expect(p.nome).to.eql(\"Webcam HD\"); pm.expect(Number(p.preco)).to.eql(249.9); pm.expect(Number(p.estoque)).to.eql(10); });"
+                ],
+                "_lastExecutionId": "7292071e-8fed-4838-8dd8-6963561e60ec"
+              }
+            }
+          ]
+        },
+        "request": {
+          "description": {
+            "content": "Execute após 06. O produto criado por JSON pode ser consultado em XML.",
+            "type": "text/plain"
+          },
+          "url": {
+            "protocol": "https",
+            "path": [
+              "produtos",
+              "8"
+            ],
+            "host": [
+              "stockservice-xmljson",
+              "azurewebsites",
+              "net"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Accept",
+              "value": "application/xml"
+            },
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "9cd28d57-4823-41bc-a462-bcf587b84f26",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "stockservice-xmljson.azurewebsites.net",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            }
+          ],
+          "method": "GET"
+        },
+        "response": {
+          "id": "88f47762-a6d4-44fc-8f8a-8b0a0b28cc92",
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/xml"
+            },
+            {
+              "key": "Date",
+              "value": "Fri, 27 Nov 2026 03:39:11 GMT"
+            },
+            {
+              "key": "Transfer-Encoding",
+              "value": "chunked"
+            },
+            {
+              "key": "Vary",
+              "value": "Origin"
+            },
+            {
+              "key": "Vary",
+              "value": "Access-Control-Request-Method"
+            },
+            {
+              "key": "Vary",
+              "value": "Access-Control-Request-Headers"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              60,
+              112,
+              114,
+              111,
+              100,
+              117,
+              116,
+              111,
+              62,
+              60,
+              105,
+              100,
+              62,
+              56,
+              60,
+              47,
+              105,
+              100,
+              62,
+              60,
+              110,
+              111,
+              109,
+              101,
+              62,
+              87,
+              101,
+              98,
+              99,
+              97,
+              109,
+              32,
+              72,
+              68,
+              60,
+              47,
+              110,
+              111,
+              109,
+              101,
+              62,
+              60,
+              112,
+              114,
+              101,
+              99,
+              111,
+              62,
+              50,
+              52,
+              57,
+              46,
+              57,
+              48,
+              60,
+              47,
+              112,
+              114,
+              101,
+              99,
+              111,
+              62,
+              60,
+              101,
+              115,
+              116,
+              111,
+              113,
+              117,
+              101,
+              62,
+              49,
+              48,
+              60,
+              47,
+              101,
+              115,
+              116,
+              111,
+              113,
+              117,
+              101,
+              62,
+              60,
+              47,
+              112,
+              114,
+              111,
+              100,
+              117,
+              116,
+              111,
+              62
+            ]
+          },
+          "cookie": [],
+          "responseTime": 463,
+          "responseSize": 93
+        },
+        "id": "87e390e8-f2f3-4011-b668-b0fe8defc554",
+        "assertions": [
+          {
+            "assertion": "HTTP 200",
+            "skipped": false
+          },
+          {
+            "assertion": "Content-Type: application/xml",
+            "skipped": false
+          },
+          {
+            "assertion": "Vary: Accept",
+            "skipped": false
+          },
+          {
+            "assertion": "Mesmo produto criado por JSON",
+            "skipped": false
+          }
+        ]
+      },
+      {
+        "cursor": {
+          "ref": "c210384f-1228-46ff-93ca-27c685b62244",
+          "length": 12,
+          "cycles": 1,
+          "position": 8,
+          "iteration": 0,
+          "httpRequestId": "fbad457b-9385-465f-824c-7a6fecf3d318"
+        },
+        "item": {
+          "id": "3c58af8a-89d5-4d89-8f9b-d474355060da",
+          "name": "09 - Produto inexistente | 404",
+          "request": {
+            "description": {
+              "content": "Recurso inexistente.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "produtos",
+                "999999"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "711815e1-fda9-40d9-9a9d-25d2d03b9e85",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 404\", () => pm.response.to.have.status(404));"
+                ],
+                "_lastExecutionId": "0b3b1212-6470-431d-9a9a-7199287e2c2c"
+              }
+            }
+          ]
+        },
+        "request": {
+          "description": {
+            "content": "Recurso inexistente.",
+            "type": "text/plain"
+          },
+          "url": {
+            "protocol": "https",
+            "path": [
+              "produtos",
+              "999999"
+            ],
+            "host": [
+              "stockservice-xmljson",
+              "azurewebsites",
+              "net"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Accept",
+              "value": "application/json"
+            },
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "d1f11ba2-fd02-485d-ab1f-0b2d0e87aced",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "stockservice-xmljson.azurewebsites.net",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            }
+          ],
+          "method": "GET"
+        },
+        "response": {
+          "id": "1caa32bf-b948-4051-8da4-d1f4cb02d1f9",
+          "status": "Not Found",
+          "code": 404,
+          "header": [
+            {
+              "key": "Content-Length",
+              "value": "0"
+            },
+            {
+              "key": "Date",
+              "value": "Fri, 27 Nov 2026 03:39:12 GMT"
+            },
+            {
+              "key": "Vary",
+              "value": "Origin"
+            },
+            {
+              "key": "Vary",
+              "value": "Access-Control-Request-Method"
+            },
+            {
+              "key": "Vary",
+              "value": "Access-Control-Request-Headers"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": []
+          },
+          "cookie": [],
+          "responseTime": 599,
+          "responseSize": 0
+        },
+        "id": "3c58af8a-89d5-4d89-8f9b-d474355060da",
+        "assertions": [
+          {
+            "assertion": "HTTP 404",
+            "skipped": false
+          }
+        ]
+      },
+      {
+        "cursor": {
+          "ref": "2af19d43-04ad-443a-971f-df67a2dc6d9a",
+          "length": 12,
+          "cycles": 1,
+          "position": 9,
+          "iteration": 0,
+          "httpRequestId": "25fea3c5-3e37-4592-85b6-79f613e8450e"
+        },
+        "item": {
+          "id": "d000f62c-0690-4833-8183-7228aa6a4878",
+          "name": "10 - Accept não suportado | 406",
+          "request": {
+            "description": {
+              "content": "O servidor não oferece a representação solicitada.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "produtos"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/plain"
+              }
+            ],
+            "method": "GET"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "abb22328-8f8c-4b34-9117-c37021d40c93",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 406\", () => pm.response.to.have.status(406));"
+                ],
+                "_lastExecutionId": "f0086065-087c-43d6-880a-25c6ff69af44"
+              }
+            }
+          ]
+        },
+        "request": {
+          "description": {
+            "content": "O servidor não oferece a representação solicitada.",
+            "type": "text/plain"
+          },
+          "url": {
+            "protocol": "https",
+            "path": [
+              "produtos"
+            ],
+            "host": [
+              "stockservice-xmljson",
+              "azurewebsites",
+              "net"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Accept",
+              "value": "text/plain"
+            },
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "2c269a48-f081-4f22-a1de-dda915efa7f2",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "stockservice-xmljson.azurewebsites.net",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            }
+          ],
+          "method": "GET"
+        },
+        "response": {
+          "id": "42e9a03b-5c68-412b-9aec-6338700276ed",
+          "status": "Not Acceptable",
+          "code": 406,
+          "header": [
+            {
+              "key": "Content-Length",
+              "value": "0"
+            },
+            {
+              "key": "Date",
+              "value": "Fri, 27 Nov 2026 03:39:13 GMT"
+            },
+            {
+              "key": "Vary",
+              "value": "Origin"
+            },
+            {
+              "key": "Vary",
+              "value": "Access-Control-Request-Method"
+            },
+            {
+              "key": "Vary",
+              "value": "Access-Control-Request-Headers"
+            },
+            {
+              "key": "Accept",
+              "value": "application/json, application/xml"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": []
+          },
+          "cookie": [],
+          "responseTime": 412,
+          "responseSize": 0
+        },
+        "id": "d000f62c-0690-4833-8183-7228aa6a4878",
+        "assertions": [
+          {
+            "assertion": "HTTP 406",
+            "skipped": false
+          }
+        ]
+      },
+      {
+        "cursor": {
+          "ref": "3ecf92e5-d862-4ba4-8c75-c30da425e7d9",
+          "length": 12,
+          "cycles": 1,
+          "position": 10,
+          "iteration": 0,
+          "httpRequestId": "1f4c6e7a-f577-40a5-b786-d4abb0d4e28e"
+        },
+        "item": {
+          "id": "821b8369-d807-4f78-8400-6291806716c3",
+          "name": "11 - Content-Type não suportado | 415",
+          "request": {
+            "description": {
+              "content": "O formato enviado não é aceito pelo endpoint.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "produtos"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "text/plain"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "nome=Teste",
+              "options": {
+                "raw": {
+                  "language": "text"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "1b72aae1-1684-47ca-a85b-107ea53b05e5",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 415\", () => pm.response.to.have.status(415));"
+                ],
+                "_lastExecutionId": "f67c5c2a-d2ed-4969-9d3f-509af85bc12c"
+              }
+            }
+          ]
+        },
+        "request": {
+          "description": {
+            "content": "O formato enviado não é aceito pelo endpoint.",
+            "type": "text/plain"
+          },
+          "url": {
+            "protocol": "https",
+            "path": [
+              "produtos"
+            ],
+            "host": [
+              "stockservice-xmljson",
+              "azurewebsites",
+              "net"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Accept",
+              "value": "application/json"
+            },
+            {
+              "key": "Content-Type",
+              "value": "text/plain"
+            },
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "b4a06314-4074-49b0-9de0-e24bc4b605e3",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "stockservice-xmljson.azurewebsites.net",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            },
+            {
+              "key": "Content-Length",
+              "value": "10",
+              "system": true
+            }
+          ],
+          "method": "POST",
+          "body": {
+            "mode": "raw",
+            "raw": "nome=Teste",
+            "options": {
+              "raw": {
+                "language": "text"
+              }
+            }
+          }
+        },
+        "response": {
+          "id": "544153e0-05c5-4d90-81b0-b1fd475b2e7c",
+          "status": "Unsupported Media Type",
+          "code": 415,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Date",
+              "value": "Fri, 27 Nov 2026 03:39:13 GMT"
+            },
+            {
+              "key": "Transfer-Encoding",
+              "value": "chunked"
+            },
+            {
+              "key": "Vary",
+              "value": "Origin"
+            },
+            {
+              "key": "Vary",
+              "value": "Access-Control-Request-Method"
+            },
+            {
+              "key": "Vary",
+              "value": "Access-Control-Request-Headers"
+            },
+            {
+              "key": "Accept",
+              "value": "application/json, application/xml"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              116,
+              105,
+              109,
+              101,
+              115,
+              116,
+              97,
+              109,
+              112,
+              34,
+              58,
+              34,
+              50,
+              48,
+              50,
+              54,
+              45,
+              49,
+              49,
+              45,
+              50,
+              55,
+              84,
+              48,
+              51,
+              58,
+              51,
+              57,
+              58,
+              49,
+              51,
+              46,
+              55,
+              48,
+              48,
+              90,
+              34,
+              44,
+              34,
+              115,
+              116,
+              97,
+              116,
+              117,
+              115,
+              34,
+              58,
+              52,
+              49,
+              53,
+              44,
+              34,
+              101,
+              114,
+              114,
+              111,
+              114,
+              34,
+              58,
+              34,
+              85,
+              110,
+              115,
+              117,
+              112,
+              112,
+              111,
+              114,
+              116,
+              101,
+              100,
+              32,
+              77,
+              101,
+              100,
+              105,
+              97,
+              32,
+              84,
+              121,
+              112,
+              101,
+              34,
+              44,
+              34,
+              112,
+              97,
+              116,
+              104,
+              34,
+              58,
+              34,
+              47,
+              112,
+              114,
+              111,
+              100,
+              117,
+              116,
+              111,
+              115,
+              34,
+              125
+            ]
+          },
+          "cookie": [],
+          "responseTime": 424,
+          "responseSize": 105
+        },
+        "id": "821b8369-d807-4f78-8400-6291806716c3",
+        "assertions": [
+          {
+            "assertion": "HTTP 415",
+            "skipped": false
+          }
+        ]
+      },
+      {
+        "cursor": {
+          "ref": "e618d73e-8627-4804-99ab-30bfc08ee3a5",
+          "length": 12,
+          "cycles": 1,
+          "position": 11,
+          "iteration": 0,
+          "httpRequestId": "18500fd0-7fb4-4449-a5b6-b3f888c38afd"
+        },
+        "item": {
+          "id": "ee3e4bb3-1528-4beb-86b6-9eebb815eaa4",
+          "name": "12 - Dados inválidos | 400",
+          "request": {
+            "description": {
+              "content": "Bean Validation rejeita nome vazio, preço e estoque negativos.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "produtos"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"\",\n  \"preco\": -1,\n  \"estoque\": -1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "2f549e40-6e93-41ec-a792-ec8212fbea29",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 400\", () => pm.response.to.have.status(400));"
+                ],
+                "_lastExecutionId": "04579bcd-40a7-48ed-b38d-6505d99bd897"
+              }
+            }
+          ]
+        },
+        "request": {
+          "description": {
+            "content": "Bean Validation rejeita nome vazio, preço e estoque negativos.",
+            "type": "text/plain"
+          },
+          "url": {
+            "protocol": "https",
+            "path": [
+              "produtos"
+            ],
+            "host": [
+              "stockservice-xmljson",
+              "azurewebsites",
+              "net"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Accept",
+              "value": "application/json"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "d7da06b8-4e96-48df-b03e-27e23236a57f",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "stockservice-xmljson.azurewebsites.net",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            },
+            {
+              "key": "Content-Length",
+              "value": "48",
+              "system": true
+            }
+          ],
+          "method": "POST",
+          "body": {
+            "mode": "raw",
+            "raw": "{\n  \"nome\": \"\",\n  \"preco\": -1,\n  \"estoque\": -1\n}",
+            "options": {
+              "raw": {
+                "language": "json"
+              }
+            }
+          }
+        },
+        "response": {
+          "id": "4b3a1726-2501-4910-ac0d-fc11520d671d",
+          "status": "Bad Request",
+          "code": 400,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Date",
+              "value": "Fri, 27 Nov 2026 03:39:14 GMT"
+            },
+            {
+              "key": "Transfer-Encoding",
+              "value": "chunked"
+            },
+            {
+              "key": "Vary",
+              "value": "Origin"
+            },
+            {
+              "key": "Vary",
+              "value": "Access-Control-Request-Method"
+            },
+            {
+              "key": "Vary",
+              "value": "Access-Control-Request-Headers"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              116,
+              105,
+              109,
+              101,
+              115,
+              116,
+              97,
+              109,
+              112,
+              34,
+              58,
+              34,
+              50,
+              48,
+              50,
+              54,
+              45,
+              49,
+              49,
+              45,
+              50,
+              55,
+              84,
+              48,
+              51,
+              58,
+              51,
+              57,
+              58,
+              49,
+              52,
+              46,
+              50,
+              55,
+              57,
+              90,
+              34,
+              44,
+              34,
+              115,
+              116,
+              97,
+              116,
+              117,
+              115,
+              34,
+              58,
+              52,
+              48,
+              48,
+              44,
+              34,
+              101,
+              114,
+              114,
+              111,
+              114,
+              34,
+              58,
+              34,
+              66,
+              97,
+              100,
+              32,
+              82,
+              101,
+              113,
+              117,
+              101,
+              115,
+              116,
+              34,
+              44,
+              34,
+              112,
+              97,
+              116,
+              104,
+              34,
+              58,
+              34,
+              47,
+              112,
+              114,
+              111,
+              100,
+              117,
+              116,
+              111,
+              115,
+              34,
+              125
+            ]
+          },
+          "cookie": [],
+          "responseTime": 483,
+          "responseSize": 94
+        },
+        "id": "ee3e4bb3-1528-4beb-86b6-9eebb815eaa4",
+        "assertions": [
+          {
+            "assertion": "HTTP 400",
+            "skipped": false
+          }
+        ]
+      }
+    ],
+    "transfers": {
+      "responseTotal": 1719
+    },
+    "failures": [],
+    "error": null
+  }
+}

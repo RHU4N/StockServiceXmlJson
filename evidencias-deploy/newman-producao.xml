@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="WebServicesLab — StockService | JSON e XML" tests="12" time="6.107">
+  <testsuite name="01 - Listar produtos | JSON" id="7a2d84ac-9ea5-4500-912f-1f36ae026fea" timestamp="2026-11-27T03:39:04.197Z" tests="4" failures="0" errors="0" time="1.237">
+    <testcase name="HTTP 200" time="1.237" classname="01ListarProdutosJson"/>
+    <testcase name="Content-Type: application/json" time="1.237" classname="01ListarProdutosJson"/>
+    <testcase name="Vary: Accept" time="1.237" classname="01ListarProdutosJson"/>
+    <testcase name="Coleção de produtos" time="1.237" classname="01ListarProdutosJson"/>
+  </testsuite>
+  <testsuite name="02 - Listar produtos | XML" id="a7e00caa-b6c2-4196-ba7a-5c099c76cabc" timestamp="2026-11-27T03:39:04.197Z" tests="4" failures="0" errors="0" time="0.533">
+    <testcase name="HTTP 200" time="0.533" classname="02ListarProdutosXml"/>
+    <testcase name="Content-Type: application/xml" time="0.533" classname="02ListarProdutosXml"/>
+    <testcase name="Vary: Accept" time="0.533" classname="02ListarProdutosXml"/>
+    <testcase name="Coleção XML" time="0.533" classname="02ListarProdutosXml"/>
+  </testsuite>
+  <testsuite name="03 - Consultar Notebook | JSON" id="7698925c-4f5c-49b6-938a-5d74c224ca39" timestamp="2026-11-27T03:39:04.197Z" tests="4" failures="0" errors="0" time="0.213">
+    <testcase name="HTTP 200" time="0.213" classname="03ConsultarNotebookJson"/>
+    <testcase name="Content-Type: application/json" time="0.213" classname="03ConsultarNotebookJson"/>
+    <testcase name="Vary: Accept" time="0.213" classname="03ConsultarNotebookJson"/>
+    <testcase name="Dados do Notebook" time="0.213" classname="03ConsultarNotebookJson"/>
+  </testsuite>
+  <testsuite name="04 - Consultar Notebook | XML e comparar" id="8d6878e9-1b21-4da2-b052-3455e1c40819" timestamp="2026-11-27T03:39:04.197Z" tests="5" failures="0" errors="0" time="0.327">
+    <testcase name="HTTP 200" time="0.327" classname="04ConsultarNotebookXmlEComparar"/>
+    <testcase name="Content-Type: application/xml" time="0.327" classname="04ConsultarNotebookXmlEComparar"/>
+    <testcase name="Vary: Accept" time="0.327" classname="04ConsultarNotebookXmlEComparar"/>
+    <testcase name="Dados do Notebook" time="0.327" classname="04ConsultarNotebookXmlEComparar"/>
+    <testcase name="Equivalência com JSON da requisição 03" time="0.327" classname="04ConsultarNotebookXmlEComparar"/>
+  </testsuite>
+  <testsuite name="05 - JSON por padrão" id="9ce474e7-45e1-4756-94d5-8096c6ec0d26" timestamp="2026-11-27T03:39:04.197Z" tests="4" failures="0" errors="0" time="0.438">
+    <testcase name="HTTP 200" time="0.438" classname="05JsonPorPadrao"/>
+    <testcase name="Content-Type: application/json" time="0.438" classname="05JsonPorPadrao"/>
+    <testcase name="Vary: Accept" time="0.438" classname="05JsonPorPadrao"/>
+    <testcase name="Dados do Notebook" time="0.438" classname="05JsonPorPadrao"/>
+  </testsuite>
+  <testsuite name="06 - Cadastrar produto | JSON" id="686ae1fb-383f-44f1-bd51-60a7d0fb4815" timestamp="2026-11-27T03:39:04.197Z" tests="4" failures="0" errors="0" time="0.525">
+    <testcase name="HTTP 201" time="0.525" classname="06CadastrarProdutoJson"/>
+    <testcase name="Content-Type: application/json" time="0.525" classname="06CadastrarProdutoJson"/>
+    <testcase name="Vary: Accept" time="0.525" classname="06CadastrarProdutoJson"/>
+    <testcase name="Produto cadastrado" time="0.525" classname="06CadastrarProdutoJson"/>
+  </testsuite>
+  <testsuite name="07 - Cadastrar produto | XML" id="fc56b647-ade4-4542-bf9a-2b9760c18c1a" timestamp="2026-11-27T03:39:04.197Z" tests="4" failures="0" errors="0" time="0.453">
+    <testcase name="HTTP 201" time="0.453" classname="07CadastrarProdutoXml"/>
+    <testcase name="Content-Type: application/xml" time="0.453" classname="07CadastrarProdutoXml"/>
+    <testcase name="Vary: Accept" time="0.453" classname="07CadastrarProdutoXml"/>
+    <testcase name="Produto cadastrado" time="0.453" classname="07CadastrarProdutoXml"/>
+  </testsuite>
+  <testsuite name="08 - Consultar cadastro JSON em XML" id="87e390e8-f2f3-4011-b668-b0fe8defc554" timestamp="2026-11-27T03:39:04.197Z" tests="4" failures="0" errors="0" time="0.463">
+    <testcase name="HTTP 200" time="0.463" classname="08ConsultarCadastroJsonEmXml"/>
+    <testcase name="Content-Type: application/xml" time="0.463" classname="08ConsultarCadastroJsonEmXml"/>
+    <testcase name="Vary: Accept" time="0.463" classname="08ConsultarCadastroJsonEmXml"/>
+    <testcase name="Mesmo produto criado por JSON" time="0.463" classname="08ConsultarCadastroJsonEmXml"/>
+  </testsuite>
+  <testsuite name="09 - Produto inexistente | 404" id="3c58af8a-89d5-4d89-8f9b-d474355060da" timestamp="2026-11-27T03:39:04.197Z" tests="1" failures="0" errors="0" time="0.599">
+    <testcase name="HTTP 404" time="0.599" classname="09ProdutoInexistente404"/>
+  </testsuite>
+  <testsuite name="10 - Accept não suportado | 406" id="d000f62c-0690-4833-8183-7228aa6a4878" timestamp="2026-11-27T03:39:04.197Z" tests="1" failures="0" errors="0" time="0.412">
+    <testcase name="HTTP 406" time="0.412" classname="10AcceptNaoSuportado406"/>
+  </testsuite>
+  <testsuite name="11 - Content-Type não suportado | 415" id="821b8369-d807-4f78-8400-6291806716c3" timestamp="2026-11-27T03:39:04.197Z" tests="1" failures="0" errors="0" time="0.424">
+    <testcase name="HTTP 415" time="0.424" classname="11ContentTypeNaoSuportado415"/>
+  </testsuite>
+  <testsuite name="12 - Dados inválidos | 400" id="ee3e4bb3-1528-4beb-86b6-9eebb815eaa4" timestamp="2026-11-27T03:39:04.197Z" tests="1" failures="0" errors="0" time="0.483">
+    <testcase name="HTTP 400" time="0.483" classname="12DadosInvalidos400"/>
+  </testsuite>
+</testsuites>

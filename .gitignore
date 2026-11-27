@@ -31,3 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Logs completos de verificacao ficam locais; resumos e relatorios sao versionados.
+evidencias-deploy/*.log

@@ -1,0 +1,573 @@
+{
+  "info": {
+    "_postman_id": "a01c4467-c25a-49ce-83f9-1583edb30a5f",
+    "name": "WebServicesLab — StockService | JSON e XML",
+    "description": "Demonstração acadêmica SENAI. API local real, sem autenticação. Execute StockService antes de enviar. Requisições 03 e 04 em sequência comparam representações; 06 antes de 08. POST altera dados em memória; reinicie o servidor para restaurar a lista inicial. Testes são expectativas, não resultados executados.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-11-26T07:34:21.000Z",
+    "updatedAt": "2026-11-26T07:34:21.000Z",
+    "lastUpdatedBy": "31219875",
+    "uid": "31219875-a01c4467-c25a-49ce-83f9-1583edb30a5f"
+  },
+  "item": [
+    {
+      "name": "01 - Listar produtos | JSON",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+              "pm.test(\"Content-Type: application/json\", () => pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"));",
+              "pm.test(\"Vary: Accept\", () => pm.expect(pm.response.headers.get(\"Vary\") || \"\").to.match(/\\bAccept\\b/i));",
+              "pm.test(\"Coleção de produtos\", () => pm.expect(pm.response.json().produtos).to.be.an(\"array\").with.lengthOf.at.least(5));"
+            ]
+          }
+        }
+      ],
+      "id": "7a2d84ac-9ea5-4500-912f-1f36ae026fea",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/produtos",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "produtos"
+          ]
+        },
+        "description": "Lista em JSON. A raiz contém a propriedade produtos."
+      },
+      "response": [],
+      "createdAt": "2026-11-26T07:34:21.000Z",
+      "updatedAt": "2026-11-26T07:34:21.000Z",
+      "uid": "31219875-7a2d84ac-9ea5-4500-912f-1f36ae026fea"
+    },
+    {
+      "name": "02 - Listar produtos | XML",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+              "pm.test(\"Content-Type: application/xml\", () => pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/xml\"));",
+              "pm.test(\"Vary: Accept\", () => pm.expect(pm.response.headers.get(\"Vary\") || \"\").to.match(/\\bAccept\\b/i));",
+              "pm.test(\"Coleção XML\", () => { const p = xml2Json(pm.response.text()).produtos.produto; pm.expect(p).to.be.an(\"array\").with.lengthOf.at.least(5); });"
+            ]
+          }
+        }
+      ],
+      "id": "a7e00caa-b6c2-4196-ba7a-5c099c76cabc",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/xml"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/produtos",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "produtos"
+          ]
+        },
+        "description": "Mesma URL e método, alterando somente Accept. Raiz produtos e elementos produto."
+      },
+      "response": [],
+      "createdAt": "2026-11-26T07:34:21.000Z",
+      "updatedAt": "2026-11-26T07:34:21.000Z",
+      "uid": "31219875-a7e00caa-b6c2-4196-ba7a-5c099c76cabc"
+    },
+    {
+      "name": "03 - Consultar Notebook | JSON",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+              "pm.test(\"Content-Type: application/json\", () => pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"));",
+              "pm.test(\"Vary: Accept\", () => pm.expect(pm.response.headers.get(\"Vary\") || \"\").to.match(/\\bAccept\\b/i));",
+              "pm.test(\"Dados do Notebook\", () => { const p = pm.response.json(); pm.expect(p.id).to.eql(1); pm.expect(p.nome).to.eql(\"Notebook\"); pm.expect(p.preco).to.eql(2500); pm.expect(p.estoque).to.eql(12); });",
+              "if (pm.response.code === 200) { const p = pm.response.json(); pm.collectionVariables.set(\"produtoJson\", JSON.stringify({id:p.id,nome:p.nome,preco:p.preco,estoque:p.estoque})); pm.collectionVariables.set(\"jsonBytes\", unescape(encodeURIComponent(pm.response.text())).length.toString()); }"
+            ]
+          }
+        }
+      ],
+      "id": "7698925c-4f5c-49b6-938a-5d74c224ca39",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/produtos/1",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "produtos",
+            "1"
+          ]
+        },
+        "description": "Salva dados e tamanho para comparação com a próxima requisição."
+      },
+      "response": [],
+      "createdAt": "2026-11-26T07:34:21.000Z",
+      "updatedAt": "2026-11-26T07:34:21.000Z",
+      "uid": "31219875-7698925c-4f5c-49b6-938a-5d74c224ca39"
+    },
+    {
+      "name": "04 - Consultar Notebook | XML e comparar",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+              "pm.test(\"Content-Type: application/xml\", () => pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/xml\"));",
+              "pm.test(\"Vary: Accept\", () => pm.expect(pm.response.headers.get(\"Vary\") || \"\").to.match(/\\bAccept\\b/i));",
+              "pm.test(\"Dados do Notebook\", () => { const p = xml2Json(pm.response.text()).produto; pm.expect(Number(p.id)).to.eql(1); pm.expect(p.nome).to.eql(\"Notebook\"); pm.expect(Number(p.preco)).to.eql(2500); pm.expect(Number(p.estoque)).to.eql(12); });",
+              "pm.test(\"Equivalência com JSON da requisição 03\", () => { const anterior = pm.collectionVariables.get(\"produtoJson\"); pm.expect(anterior, \"Execute a requisição 03 antes\").to.be.ok; const p = xml2Json(pm.response.text()).produto; pm.expect({id:Number(p.id),nome:p.nome,preco:Number(p.preco),estoque:Number(p.estoque)}).to.deep.eql(JSON.parse(anterior)); });",
+              "console.log(\"JSON (bytes UTF-8):\", pm.collectionVariables.get(\"jsonBytes\"), \"XML (bytes UTF-8):\", unescape(encodeURIComponent(pm.response.text())).length);"
+            ]
+          }
+        }
+      ],
+      "id": "8d6878e9-1b21-4da2-b052-3455e1c40819",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/xml"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/produtos/1",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "produtos",
+            "1"
+          ]
+        },
+        "description": "Execute após 03 para comparar os valores e o tamanho UTF-8 do corpo textual. Veja Test Results e Postman Console."
+      },
+      "response": [],
+      "createdAt": "2026-11-26T07:34:21.000Z",
+      "updatedAt": "2026-11-26T07:34:21.000Z",
+      "uid": "31219875-8d6878e9-1b21-4da2-b052-3455e1c40819"
+    },
+    {
+      "name": "05 - JSON por padrão",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+              "pm.test(\"Content-Type: application/json\", () => pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"));",
+              "pm.test(\"Vary: Accept\", () => pm.expect(pm.response.headers.get(\"Vary\") || \"\").to.match(/\\bAccept\\b/i));",
+              "pm.test(\"Dados do Notebook\", () => { const p = pm.response.json(); pm.expect(p.id).to.eql(1); pm.expect(p.nome).to.eql(\"Notebook\"); pm.expect(p.preco).to.eql(2500); pm.expect(p.estoque).to.eql(12); });"
+            ]
+          }
+        }
+      ],
+      "id": "9ce474e7-45e1-4756-94d5-8096c6ec0d26",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "*/*"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/produtos/1",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "produtos",
+            "1"
+          ]
+        },
+        "description": "Accept genérico: o servidor seleciona JSON como padrão."
+      },
+      "response": [],
+      "createdAt": "2026-11-26T07:34:21.000Z",
+      "updatedAt": "2026-11-26T07:34:21.000Z",
+      "uid": "31219875-9ce474e7-45e1-4756-94d5-8096c6ec0d26"
+    },
+    {
+      "name": "06 - Cadastrar produto | JSON",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 201\", () => pm.response.to.have.status(201));",
+              "pm.test(\"Content-Type: application/json\", () => pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"));",
+              "pm.test(\"Vary: Accept\", () => pm.expect(pm.response.headers.get(\"Vary\") || \"\").to.match(/\\bAccept\\b/i));",
+              "pm.test(\"Produto cadastrado\", () => { const p = pm.response.json(); pm.expect(p.id).to.be.a(\"number\"); pm.expect(p.nome).to.eql(\"Webcam HD\"); pm.expect(p.preco).to.eql(249.9); pm.expect(p.estoque).to.eql(10); });",
+              "if(pm.response.code===201) pm.collectionVariables.set(\"idCriadoJson\",String(pm.response.json().id));"
+            ]
+          }
+        }
+      ],
+      "id": "686ae1fb-383f-44f1-bd51-60a7d0fb4815",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nome\": \"Webcam HD\",\n  \"preco\": 249.9,\n  \"estoque\": 10\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/produtos",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "produtos"
+          ]
+        },
+        "description": "Demonstra desserialização JSON no Java. Adiciona produto em memória."
+      },
+      "response": [],
+      "createdAt": "2026-11-26T07:34:21.000Z",
+      "updatedAt": "2026-11-26T07:34:21.000Z",
+      "uid": "31219875-686ae1fb-383f-44f1-bd51-60a7d0fb4815"
+    },
+    {
+      "name": "07 - Cadastrar produto | XML",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 201\", () => pm.response.to.have.status(201));",
+              "pm.test(\"Content-Type: application/xml\", () => pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/xml\"));",
+              "pm.test(\"Vary: Accept\", () => pm.expect(pm.response.headers.get(\"Vary\") || \"\").to.match(/\\bAccept\\b/i));",
+              "pm.test(\"Produto cadastrado\", () => { const p = xml2Json(pm.response.text()).produto; pm.expect(Number(p.id)).to.be.above(5); pm.expect(p.nome).to.eql(\"Mousepad Gamer\"); pm.expect(Number(p.preco)).to.eql(79.9); pm.expect(Number(p.estoque)).to.eql(25); });"
+            ]
+          }
+        }
+      ],
+      "id": "fc56b647-ade4-4542-bf9a-2b9760c18c1a",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/xml"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/xml"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "<produto>\n  <nome>Mousepad Gamer</nome>\n  <preco>79.90</preco>\n  <estoque>25</estoque>\n</produto>",
+          "options": {
+            "raw": {
+              "language": "xml"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/produtos",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "produtos"
+          ]
+        },
+        "description": "Demonstra desserialização XML no Java."
+      },
+      "response": [],
+      "createdAt": "2026-11-26T07:34:21.000Z",
+      "updatedAt": "2026-11-26T07:34:21.000Z",
+      "uid": "31219875-fc56b647-ade4-4542-bf9a-2b9760c18c1a"
+    },
+    {
+      "name": "08 - Consultar cadastro JSON em XML",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+              "pm.test(\"Content-Type: application/xml\", () => pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/xml\"));",
+              "pm.test(\"Vary: Accept\", () => pm.expect(pm.response.headers.get(\"Vary\") || \"\").to.match(/\\bAccept\\b/i));",
+              "pm.test(\"Mesmo produto criado por JSON\", () => { const p = xml2Json(pm.response.text()).produto; pm.expect(Number(p.id)).to.eql(Number(pm.collectionVariables.get(\"idCriadoJson\"))); pm.expect(p.nome).to.eql(\"Webcam HD\"); pm.expect(Number(p.preco)).to.eql(249.9); pm.expect(Number(p.estoque)).to.eql(10); });"
+            ]
+          }
+        }
+      ],
+      "id": "87e390e8-f2f3-4011-b668-b0fe8defc554",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/xml"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/produtos/{{idCriadoJson}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "produtos",
+            "{{idCriadoJson}}"
+          ]
+        },
+        "description": "Execute após 06. O produto criado por JSON pode ser consultado em XML."
+      },
+      "response": [],
+      "createdAt": "2026-11-26T07:34:21.000Z",
+      "updatedAt": "2026-11-26T07:34:21.000Z",
+      "uid": "31219875-87e390e8-f2f3-4011-b668-b0fe8defc554"
+    },
+    {
+      "name": "09 - Produto inexistente | 404",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 404\", () => pm.response.to.have.status(404));"
+            ]
+          }
+        }
+      ],
+      "id": "3c58af8a-89d5-4d89-8f9b-d474355060da",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/produtos/999999",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "produtos",
+            "999999"
+          ]
+        },
+        "description": "Recurso inexistente."
+      },
+      "response": [],
+      "createdAt": "2026-11-26T07:34:21.000Z",
+      "updatedAt": "2026-11-26T07:34:21.000Z",
+      "uid": "31219875-3c58af8a-89d5-4d89-8f9b-d474355060da"
+    },
+    {
+      "name": "10 - Accept não suportado | 406",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 406\", () => pm.response.to.have.status(406));"
+            ]
+          }
+        }
+      ],
+      "id": "d000f62c-0690-4833-8183-7228aa6a4878",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "text/plain"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/produtos",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "produtos"
+          ]
+        },
+        "description": "O servidor não oferece a representação solicitada."
+      },
+      "response": [],
+      "createdAt": "2026-11-26T07:34:21.000Z",
+      "updatedAt": "2026-11-26T07:34:21.000Z",
+      "uid": "31219875-d000f62c-0690-4833-8183-7228aa6a4878"
+    },
+    {
+      "name": "11 - Content-Type não suportado | 415",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 415\", () => pm.response.to.have.status(415));"
+            ]
+          }
+        }
+      ],
+      "id": "821b8369-d807-4f78-8400-6291806716c3",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "text/plain"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "nome=Teste",
+          "options": {
+            "raw": {
+              "language": "text"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/produtos",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "produtos"
+          ]
+        },
+        "description": "O formato enviado não é aceito pelo endpoint."
+      },
+      "response": [],
+      "createdAt": "2026-11-26T07:34:21.000Z",
+      "updatedAt": "2026-11-26T07:34:21.000Z",
+      "uid": "31219875-821b8369-d807-4f78-8400-6291806716c3"
+    },
+    {
+      "name": "12 - Dados inválidos | 400",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 400\", () => pm.response.to.have.status(400));"
+            ]
+          }
+        }
+      ],
+      "id": "ee3e4bb3-1528-4beb-86b6-9eebb815eaa4",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nome\": \"\",\n  \"preco\": -1,\n  \"estoque\": -1\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/produtos",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "produtos"
+          ]
+        },
+        "description": "Bean Validation rejeita nome vazio, preço e estoque negativos."
+      },
+      "response": [],
+      "createdAt": "2026-11-26T07:34:21.000Z",
+      "updatedAt": "2026-11-26T07:34:21.000Z",
+      "uid": "31219875-ee3e4bb3-1528-4beb-86b6-9eebb815eaa4"
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "produtoJson",
+      "value": ""
+    },
+    {
+      "key": "jsonBytes",
+      "value": ""
+    },
+    {
+      "key": "idCriadoJson",
+      "value": ""
+    }
+  ]
+}

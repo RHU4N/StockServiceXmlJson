@@ -4,6 +4,15 @@ Web Service REST em **Java + Spring Boot** do projeto acadêmico **WebServicesLa
 
 - **Repositório do Front-end (`SalesWeb`)**: https://github.com/RHU4N/SalesWebJsonXml
 
+## Demonstração publicada
+
+- **API HTTPS**: https://stockservice-xmljson.azurewebsites.net/produtos
+- **SalesWeb**: https://salesweb-xmljson.vercel.app
+- **Deploy, custos, testes e reinicialização**: [DEPLOY.md](DEPLOY.md)
+- **Evidências de produção e ambientes Postman**: [evidencias-deploy/](evidencias-deploy/)
+
+Ambiente temporário com dados fictícios em memória. Reiniciar restaura os cinco produtos iniciais.
+
 ## Tecnologias Utilizadas
 
 - **Java**: `25.0.3` (`<java.version>25</java.version>`)
@@ -32,7 +41,7 @@ Web Service REST em **Java + Spring Boot** do projeto acadêmico **WebServicesLa
 | `POST` | `/produtos` | Cadastra produto em memória (desserialização) | `application/json`, `application/xml` | `201`, `400`, `406`, `415` |
 
 - Quando o cabeçalho `Accept` não especifica preferência, o padrão configurado em `WebConfig` é `application/json`.
-- As respostas incluem o cabeçalho `Vary: Accept` e CORS liberado para `http://localhost:5173`.
+- As respostas incluem `Vary: Accept`. O CORS preserva as origens locais nas portas 5173/4173 e acrescenta as origens exatas de `CORS_ALLOWED_ORIGINS`, separadas por vírgulas. Expõe `Content-Type` e `Vary`, sem credenciais.
 
 ## Comparação Prática de Tamanho (Corpo UTF-8 Original)
 
@@ -59,7 +68,9 @@ $env:Path = "$env:JAVA_HOME\bin;$env:Path"
 .\mvnw.cmd spring-boot:run
 ```
 
-Para executar os testes automatizados (`11/11` aprovados):
+Use um JDK 25 em `JAVA_HOME` (o caminho acima é um exemplo da máquina de desenvolvimento). A porta local padrão é 8080; `SERVER_PORT` ou `PORT` podem substituí-la.
+
+Para executar os testes automatizados (`15/15` aprovados):
 
 ```powershell
 .\mvnw.cmd test

@@ -1,0 +1,7 @@
+﻿Java local: 25.0.3
+Java Azure: 25.0.5.1
+Spring Boot: 4.2.0
+Maven Wrapper: 3.10.1
+Comando: .\mvnw.cmd clean package
+15 testes; 0 falhas; 0 erros; 0 ignorados
+BUILD SUCCESS

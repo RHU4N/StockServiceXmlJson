@@ -1,0 +1,225 @@
+{
+  "base": "https://stockservice-xmljson.azurewebsites.net",
+  "origin": "https://salesweb-xmljson.vercel.app",
+  "executedAt": "2026-11-27T03:38:34.054Z",
+  "passed": true,
+  "results": [
+    {
+      "name": "Listagem JSON",
+      "method": "GET",
+      "path": "/produtos",
+      "expected": 200,
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "vary": "Origin, Access-Control-Request-Method, Access-Control-Request-Headers, Accept",
+        "access-control-allow-origin": "https://salesweb-xmljson.vercel.app",
+        "access-control-expose-headers": "Content-Type, Vary",
+        "access-control-allow-methods": null,
+        "access-control-allow-headers": null
+      },
+      "bytes": 282
+    },
+    {
+      "name": "Listagem XML",
+      "method": "GET",
+      "path": "/produtos",
+      "expected": 200,
+      "status": 200,
+      "headers": {
+        "content-type": "application/xml",
+        "vary": "Origin, Access-Control-Request-Method, Access-Control-Request-Headers, Accept",
+        "access-control-allow-origin": "https://salesweb-xmljson.vercel.app",
+        "access-control-expose-headers": "Content-Type, Vary",
+        "access-control-allow-methods": null,
+        "access-control-allow-headers": null
+      },
+      "bytes": 474
+    },
+    {
+      "name": "Equivalência da lista JSON/XML",
+      "passed": true,
+      "products": 5
+    },
+    {
+      "name": "Produto 1 JSON",
+      "method": "GET",
+      "path": "/produtos/1",
+      "expected": 200,
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "vary": "Origin, Access-Control-Request-Method, Access-Control-Request-Headers, Accept",
+        "access-control-allow-origin": "https://salesweb-xmljson.vercel.app",
+        "access-control-expose-headers": "Content-Type, Vary",
+        "access-control-allow-methods": null,
+        "access-control-allow-headers": null
+      },
+      "bytes": 55
+    },
+    {
+      "name": "Produto 1 XML",
+      "method": "GET",
+      "path": "/produtos/1",
+      "expected": 200,
+      "status": 200,
+      "headers": {
+        "content-type": "application/xml",
+        "vary": "Origin, Access-Control-Request-Method, Access-Control-Request-Headers, Accept",
+        "access-control-allow-origin": "https://salesweb-xmljson.vercel.app",
+        "access-control-expose-headers": "Content-Type, Vary",
+        "access-control-allow-methods": null,
+        "access-control-allow-headers": null
+      },
+      "bytes": 93
+    },
+    {
+      "name": "Equivalência do produto 1 JSON/XML",
+      "passed": true
+    },
+    {
+      "name": "Preflight POST XML/JSON",
+      "method": "OPTIONS",
+      "path": "/produtos",
+      "expected": 200,
+      "status": 200,
+      "headers": {
+        "content-type": null,
+        "vary": "Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+        "access-control-allow-origin": "https://salesweb-xmljson.vercel.app",
+        "access-control-expose-headers": "Content-Type, Vary",
+        "access-control-allow-methods": "GET,POST,OPTIONS",
+        "access-control-allow-headers": "content-type, accept"
+      },
+      "bytes": 0
+    },
+    {
+      "name": "POST JSON",
+      "method": "POST",
+      "path": "/produtos",
+      "expected": 201,
+      "status": 201,
+      "headers": {
+        "content-type": "application/json",
+        "vary": "Origin, Access-Control-Request-Method, Access-Control-Request-Headers, Accept",
+        "access-control-allow-origin": "https://salesweb-xmljson.vercel.app",
+        "access-control-expose-headers": "Content-Type, Vary",
+        "access-control-allow-methods": null,
+        "access-control-allow-headers": null
+      },
+      "bytes": 60
+    },
+    {
+      "name": "POST XML",
+      "method": "POST",
+      "path": "/produtos",
+      "expected": 201,
+      "status": 201,
+      "headers": {
+        "content-type": "application/xml",
+        "vary": "Origin, Access-Control-Request-Method, Access-Control-Request-Headers, Accept",
+        "access-control-allow-origin": "https://salesweb-xmljson.vercel.app",
+        "access-control-expose-headers": "Content-Type, Vary",
+        "access-control-allow-methods": null,
+        "access-control-allow-headers": null
+      },
+      "bytes": 97
+    },
+    {
+      "name": "Dados inválidos JSON",
+      "method": "POST",
+      "path": "/produtos",
+      "expected": 400,
+      "status": 400,
+      "headers": {
+        "content-type": "application/json",
+        "vary": "Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+        "access-control-allow-origin": "https://salesweb-xmljson.vercel.app",
+        "access-control-expose-headers": "Content-Type, Vary",
+        "access-control-allow-methods": null,
+        "access-control-allow-headers": null
+      },
+      "bytes": 94
+    },
+    {
+      "name": "Dados inválidos XML",
+      "method": "POST",
+      "path": "/produtos",
+      "expected": 400,
+      "status": 400,
+      "headers": {
+        "content-type": "application/xml;charset=UTF-8",
+        "vary": "Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+        "access-control-allow-origin": "https://salesweb-xmljson.vercel.app",
+        "access-control-expose-headers": "Content-Type, Vary",
+        "access-control-allow-methods": null,
+        "access-control-allow-headers": null
+      },
+      "bytes": 126
+    },
+    {
+      "name": "Produto inexistente",
+      "method": "GET",
+      "path": "/produtos/999999",
+      "expected": 404,
+      "status": 404,
+      "headers": {
+        "content-type": null,
+        "vary": "Origin, Access-Control-Request-Method, Access-Control-Request-Headers, Accept",
+        "access-control-allow-origin": "https://salesweb-xmljson.vercel.app",
+        "access-control-expose-headers": "Content-Type, Vary",
+        "access-control-allow-methods": null,
+        "access-control-allow-headers": null
+      },
+      "bytes": 0
+    },
+    {
+      "name": "Accept não suportado",
+      "method": "GET",
+      "path": "/produtos",
+      "expected": 406,
+      "status": 406,
+      "headers": {
+        "content-type": null,
+        "vary": "Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+        "access-control-allow-origin": "https://salesweb-xmljson.vercel.app",
+        "access-control-expose-headers": "Content-Type, Vary",
+        "access-control-allow-methods": null,
+        "access-control-allow-headers": null
+      },
+      "bytes": 0
+    },
+    {
+      "name": "Content-Type não suportado",
+      "method": "POST",
+      "path": "/produtos",
+      "expected": 415,
+      "status": 415,
+      "headers": {
+        "content-type": "application/json",
+        "vary": "Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+        "access-control-allow-origin": "https://salesweb-xmljson.vercel.app",
+        "access-control-expose-headers": "Content-Type, Vary",
+        "access-control-allow-methods": null,
+        "access-control-allow-headers": null
+      },
+      "bytes": 105
+    },
+    {
+      "name": "Origem não permitida",
+      "method": "GET",
+      "path": "/produtos",
+      "expected": 403,
+      "status": 403,
+      "headers": {
+        "content-type": null,
+        "vary": "Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+        "access-control-allow-origin": null,
+        "access-control-expose-headers": null,
+        "access-control-allow-methods": null,
+        "access-control-allow-headers": null
+      },
+      "bytes": 20
+    }
+  ]
+}

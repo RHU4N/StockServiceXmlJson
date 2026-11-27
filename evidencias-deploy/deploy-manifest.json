@@ -1,0 +1,32 @@
+{
+  "backend": {
+    "repository": "RHU4N/StockServiceXmlJson",
+    "sourceCommit": "3269736afcf79dfb76378ea5ce966a23d444dab9",
+    "artifact": "StockService-0.0.1-SNAPSHOT.jar",
+    "sha256": "8bf3fede87ae3577716a7ccb1952d678659d40a23c5bc7a6e84016258ced9249",
+    "remoteSha256Verified": true,
+    "azureDeploymentId": "7eeae42b-37f7-4122-9385-345a6973df99",
+    "url": "https://stockservice-xmljson.azurewebsites.net",
+    "runtime": "Java 25.0.5.1",
+    "internalPort": 80,
+    "plan": "F1",
+    "region": "eastus2",
+    "capacity": 1
+  },
+  "frontend": {
+    "repository": "RHU4N/SalesWebJsonXml",
+    "sourceCommit": "9f997702f7eb00742bc7ca873ac20c0c605ebf1b",
+    "vercelDeploymentId": "dpl_2VAwiAbWqRa8aeFVaTHbJcRph1rz",
+    "url": "https://salesweb-xmljson.vercel.app",
+    "node": "24.x",
+    "framework": "Vite",
+    "gitIntegration": true,
+    "plan": "Hobby",
+    "cliVersion": "67.0.0",
+    "errorScan": {
+      "window": "2026-11-27T03:30:54.728Z/2026-11-27T03:45:54.728Z",
+      "recordsReturned": 0,
+      "note": "Static site; no Functions configured"
+    }
+  }
+}
